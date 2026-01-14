@@ -1,0 +1,36 @@
+{
+  "exportDate": "2025-11-17T20:27:32.652Z",
+  "tables": [
+    {
+      "table": "clients",
+      "count": 1631,
+      "file": "C:\\Users\\Elfit\\OneDrive\\Desktop\\Programación\\KemperyWorldTravel\\backend\\scripts\\database-export\\clients.json"
+    },
+    {
+      "table": "bookings",
+      "count": 4,
+      "file": "C:\\Users\\Elfit\\OneDrive\\Desktop\\Programación\\KemperyWorldTravel\\backend\\scripts\\database-export\\bookings.json"
+    },
+    {
+      "table": "payments",
+      "count": 0,
+      "file": "C:\\Users\\Elfit\\OneDrive\\Desktop\\Programación\\KemperyWorldTravel\\backend\\scripts\\database-export\\payments.json"
+    },
+    {
+      "table": "payment_agreements",
+      "count": 236,
+      "file": "C:\\Users\\Elfit\\OneDrive\\Desktop\\Programación\\KemperyWorldTravel\\backend\\scripts\\database-export\\payment_agreements.json"
+    },
+    {
+      "table": "requirements",
+      "count": 4,
+      "file": "C:\\Users\\Elfit\\OneDrive\\Desktop\\Programación\\KemperyWorldTravel\\backend\\scripts\\database-export\\requirements.json"
+    },
+    {
+      "table": "users",
+      "count": 3,
+      "file": "C:\\Users\\Elfit\\OneDrive\\Desktop\\Programación\\KemperyWorldTravel\\backend\\scripts\\database-export\\users.json"
+    }
+  ],
+  "totalRecords": 1878
+}

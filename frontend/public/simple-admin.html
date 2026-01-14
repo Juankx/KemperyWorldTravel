@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Kempery World Travel</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+        }
+        .header {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1rem 2rem;
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .logout-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid white;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .logout-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1.5rem;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+            text-align: center;
+        }
+        .card h3 {
+            margin: 0 0 1rem 0;
+            font-size: 1.2rem;
+        }
+        .card .number {
+            font-size: 2rem;
+            font-weight: bold;
+            margin: 0.5rem 0;
+        }
+        .nav-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid white;
+            color: white;
+            padding: 1rem;
+            border-radius: 10px;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+        .loading {
+            text-align: center;
+            padding: 2rem;
+        }
+        .error {
+            background: rgba(255, 107, 107, 0.2);
+            border: 1px solid #ff6b6b;
+            padding: 1rem;
+            border-radius: 5px;
+            margin: 1rem 0;
+        }
+        .success {
+            background: rgba(81, 207, 102, 0.2);
+            border: 1px solid #51cf66;
+            padding: 1rem;
+            border-radius: 5px;
+            margin: 1rem 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">🏢 Kempery World Travel - Admin Panel</div>
+        <div class="user-info">
+            <span id="userName">Cargando...</span>
+            <button class="logout-btn" onclick="logout()">Cerrar Sesión</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <div id="loading" class="loading">
+            <h2>🔄 Cargando datos del dashboard...</h2>
+        </div>
+
+        <div id="error" class="error" style="display: none;">
+            <h3>❌ Error de Autenticación</h3>
+            <p>Tu sesión ha expirado o el token es inválido.</p>
+            <button class="logout-btn" onclick="goToLogin()">Ir al Login</button>
+        </div>
+
+        <div id="dashboard" style="display: none;">
+            <h2>📊 Dashboard</h2>
+            
+            <div class="dashboard-grid">
+                <div class="card">
+                    <h3>👥 Total Clientes</h3>
+                    <div class="number" id="totalClients">-</div>
+                </div>
+                <div class="card">
+                    <h3>📅 Total Reservas</h3>
+                    <div class="number" id="totalBookings">-</div>
+                </div>
+                <div class="card">
+                    <h3>💰 Total Ventas</h3>
+                    <div class="number" id="totalSales">-</div>
+                </div>
+                <div class="card">
+                    <h3>📋 Total Requerimientos</h3>
+                    <div class="number" id="totalRequirements">-</div>
+                </div>
+            </div>
+
+            <div class="nav-buttons">
+                <a href="/admin" class="nav-btn">🏠 Panel Completo (React)</a>
+                <button class="nav-btn" onclick="refreshData()">🔄 Actualizar Datos</button>
+                <button class="nav-btn" onclick="testConnection()">🔗 Probar Conexión</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let authToken = null;
+        let user = null;
+
+        // Verificar autenticación al cargar
+        window.addEventListener('load', async () => {
+            authToken = localStorage.getItem('authToken');
+            const userData = localStorage.getItem('user');
+            
+            if (!authToken || !userData) {
+                showError();
+                return;
+            }
+
+            try {
+                user = JSON.parse(userData);
+                document.getElementById('userName').textContent = `${user.first_name} ${user.last_name}`;
+                
+                // Verificar token
+                const response = await fetch('http://localhost:5000/api/auth/verify', {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`
+                    }
+                });
+
+                if (!response.ok) {
+                    showError();
+                    return;
+                }
+
+                // Cargar datos del dashboard
+                await loadDashboardData();
+                
+            } catch (error) {
+                console.error('Error:', error);
+                showError();
+            }
+        });
+
+        async function loadDashboardData() {
+            try {
+                document.getElementById('loading').style.display = 'block';
+                document.getElementById('dashboard').style.display = 'none';
+                document.getElementById('error').style.display = 'none';
+
+                // Cargar datos de clientes
+                const clientsResponse = await fetch('http://localhost:5000/api/clients/stats/overview', {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`
+                    }
+                });
+
+                if (clientsResponse.ok) {
+                    const clientsData = await clientsResponse.json();
+                    document.getElementById('totalClients').textContent = clientsData.total_clients || '0';
+                }
+
+                // Cargar datos de reservas
+                const bookingsResponse = await fetch('http://localhost:5000/api/bookings', {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`
+                    }
+                });
+
+                if (bookingsResponse.ok) {
+                    const bookingsData = await bookingsResponse.json();
+                    document.getElementById('totalBookings').textContent = bookingsData.bookings?.length || '0';
+                }
+
+                // Cargar datos de reportes
+                const reportsResponse = await fetch('http://localhost:5000/api/reports/dashboard?period=month', {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`
+                    }
+                });
+
+                if (reportsResponse.ok) {
+                    const reportsData = await reportsResponse.json();
+                    document.getElementById('totalSales').textContent = `$${reportsData.metrics?.total_ventas || '0'}`;
+                    document.getElementById('totalRequirements').textContent = reportsData.metrics?.total_requerimientos || '0';
+                }
+
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('dashboard').style.display = 'block';
+
+            } catch (error) {
+                console.error('Error cargando datos:', error);
+                showError();
+            }
+        }
+
+        function showError() {
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('dashboard').style.display = 'none';
+            document.getElementById('error').style.display = 'block';
+        }
+
+        function logout() {
+            localStorage.clear();
+            sessionStorage.clear();
+            window.location.href = '/simple-login.html';
+        }
+
+        function goToLogin() {
+            localStorage.clear();
+            sessionStorage.clear();
+            window.location.href = '/simple-login.html';
+        }
+
+        function refreshData() {
+            loadDashboardData();
+        }
+
+        async function testConnection() {
+            try {
+                const response = await fetch('http://localhost:5000/api/health');
+                const data = await response.json();
+                alert(`✅ Conexión exitosa: ${data.message}`);
+            } catch (error) {
+                alert(`❌ Error de conexión: ${error.message}`);
+            }
+        }
+    </script>
+</body>
+</html>

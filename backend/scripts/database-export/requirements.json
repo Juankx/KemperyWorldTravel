@@ -1,0 +1,58 @@
+[
+  {
+    "id": "db5f7f56-cce7-44b1-a97d-ec1a09bf13d8",
+    "client_id": "cdcec157-decf-49e6-b435-8d7f8bb9115a",
+    "contract_number": "KMPERY ESM 2156",
+    "requirement_type": "Reserva",
+    "status": "completed",
+    "description": "Reserva realizada para 1 persona en Baños por 5 noches. Fuente de contacto: Empresa Propia",
+    "assigned_to": null,
+    "created_by": "Admin",
+    "created_at": "2025-10-10T20:24:02.157Z",
+    "updated_at": "2025-10-10T20:24:02.157Z",
+    "completed_at": "2025-10-10T20:24:02.157Z",
+    "notes": null
+  },
+  {
+    "id": "e5e68ac4-116b-44ea-8ac7-25718d17b1ef",
+    "client_id": "c528d1d3-50bf-4eef-bf35-e48a94c1e9cc",
+    "contract_number": "KMPERY LOH 1515",
+    "requirement_type": "Reserva",
+    "status": "completed",
+    "description": "Reserva realizada para 1 persona en Baños por 1 noche. Fuente de contacto: Empresa Propia",
+    "assigned_to": null,
+    "created_by": "Admin",
+    "created_at": "2025-10-15T16:36:23.622Z",
+    "updated_at": "2025-10-15T16:36:23.622Z",
+    "completed_at": "2025-10-15T16:36:23.622Z",
+    "notes": null
+  },
+  {
+    "id": "7f6a6e21-0a1c-4bd3-a094-e7aee896f6e4",
+    "client_id": "9c583dd6-f1e9-4cc9-8485-b87b1198ecff",
+    "contract_number": "KMPRY-GYE-2574",
+    "requirement_type": "Reserva",
+    "status": "completed",
+    "description": "Reserva realizada para 1 persona en Baños por 5 noches. Fuente de contacto: Empresa propia",
+    "assigned_to": null,
+    "created_by": "Paola",
+    "created_at": "2025-11-12T18:23:24.924Z",
+    "updated_at": "2025-11-12T18:23:24.924Z",
+    "completed_at": "2025-11-12T18:23:24.924Z",
+    "notes": null
+  },
+  {
+    "id": "b2dfa045-0c26-477c-ade6-a565a122a9da",
+    "client_id": "e65107a7-7947-4cdc-a725-2f6f0c4a6d3f",
+    "contract_number": "KMPERY STD 1616",
+    "requirement_type": "Reserva",
+    "status": "completed",
+    "description": "Reserva realizada para 1 persona en Manta por 2 noches. Fuente de contacto: Empresa propia",
+    "assigned_to": null,
+    "created_by": "Paola",
+    "created_at": "2025-11-12T18:27:49.749Z",
+    "updated_at": "2025-11-12T18:27:49.749Z",
+    "completed_at": "2025-11-12T18:27:49.749Z",
+    "notes": null
+  }
+]

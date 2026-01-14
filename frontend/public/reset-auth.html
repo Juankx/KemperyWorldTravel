@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reset Completo - Kempery World Travel</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+            color: white;
+        }
+        .container {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+            max-width: 500px;
+        }
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top: 4px solid white;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .button {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid white;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px;
+            font-size: 16px;
+        }
+        .button:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="spinner"></div>
+        <h2>🚨 Reset Completo de Autenticación</h2>
+        <p>Se detectó un problema con la autenticación.</p>
+        <p>Se realizará una limpieza completa...</p>
+        
+        <div id="status">
+            <p>🔄 Limpiando datos...</p>
+        </div>
+        
+        <div id="buttons" style="display: none;">
+            <button class="button" onclick="goToLogin()">Ir al Login</button>
+            <button class="button" onclick="reloadPage()">Recargar Página</button>
+        </div>
+    </div>
+
+    <script>
+        const statusDiv = document.getElementById('status');
+        const buttonsDiv = document.getElementById('buttons');
+        
+        function updateStatus(message) {
+            statusDiv.innerHTML = `<p>${message}</p>`;
+        }
+        
+        function goToLogin() {
+            // Limpieza final antes de ir al login
+            localStorage.clear();
+            sessionStorage.clear();
+            document.cookie.split(";").forEach(function(c) { 
+                document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/"); 
+            });
+            window.location.href = '/simple-login.html';
+        }
+        
+        function reloadPage() {
+            window.location.reload();
+        }
+        
+        function performReset() {
+            try {
+                updateStatus('🧹 Limpiando localStorage...');
+                localStorage.clear();
+                
+                updateStatus('🧹 Limpiando sessionStorage...');
+                sessionStorage.clear();
+                
+                updateStatus('🧹 Limpiando cookies...');
+                document.cookie.split(";").forEach(function(c) { 
+                    document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/"); 
+                });
+                
+                updateStatus('✅ Limpieza completada');
+                
+                // Mostrar botones inmediatamente
+                buttonsDiv.style.display = 'block';
+                updateStatus('🎉 ¡Reset completado! Puedes continuar.');
+                
+            } catch (error) {
+                updateStatus('❌ Error durante el reset: ' + error.message);
+                buttonsDiv.style.display = 'block';
+            }
+        }
+        
+        // Iniciar reset inmediatamente
+        performReset();
+    </script>
+</body>
+</html>

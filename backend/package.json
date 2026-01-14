@@ -1,0 +1,42 @@
+{
+  "name": "kempery-backend",
+  "version": "1.0.0",
+  "description": "Backend API para Kempery World Travel",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js",
+    "init-db": "node scripts/init-db.js",
+    "import-clients": "node scripts/import-clients-corrected.js",
+    "import-all": "node scripts/import-all-contracts.js",
+    "setup": "node scripts/setup-database.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "tourism",
+    "travel",
+    "api",
+    "postgresql"
+  ],
+  "author": "Kempery World Travel",
+  "license": "ISC",
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.490.0",
+    "@aws-sdk/s3-request-presigner": "^3.490.0",
+    "axios": "^1.12.2",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "csv-parser": "^3.2.0",
+    "docx-templates": "^4.14.1",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "form-data": "^4.0.4",
+    "helmet": "^7.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "morgan": "^1.10.0",
+    "pg": "^8.11.3"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  }
+}
