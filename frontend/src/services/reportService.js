@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { api } from './api';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
@@ -7,7 +8,7 @@ const reportService = {
   getSalesReport: async (period = 'month') => {
     try {
       const token = localStorage.getItem('authToken');
-      const response = await axios.get(`${API_URL}/reports/sales?period=${period}`, {
+      const response = await api.get(`/reports/sales?period=${period}`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -24,7 +25,7 @@ const reportService = {
   getCollectionsReport: async (period = 'month') => {
     try {
       const token = localStorage.getItem('authToken');
-      const response = await axios.get(`${API_URL}/reports/collections?period=${period}`, {
+      const response = await api.get(`/reports/collections?period=${period}`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -41,7 +42,7 @@ const reportService = {
   getRequirementsReport: async (period = 'month') => {
     try {
       const token = localStorage.getItem('authToken');
-      const response = await axios.get(`${API_URL}/reports/requirements?period=${period}`, {
+      const response = await api.get(`/reports/requirements?period=${period}`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -58,7 +59,7 @@ const reportService = {
   getBookingsReport: async (period = 'month') => {
     try {
       const token = localStorage.getItem('authToken');
-      const response = await axios.get(`${API_URL}/reports/bookings?period=${period}`, {
+      const response = await api.get(`/reports/bookings?period=${period}`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -75,7 +76,7 @@ const reportService = {
   getDashboardReport: async (period = 'month') => {
     try {
       const token = localStorage.getItem('authToken');
-      const response = await axios.get(`${API_URL}/reports/dashboard?period=${period}`, {
+      const response = await api.get(`/reports/dashboard?period=${period}`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -92,7 +93,7 @@ const reportService = {
   getLastMonthSummary: async (period = 'this_month') => {
     try {
       const token = localStorage.getItem('authToken');
-      const response = await axios.get(`${API_URL}/reports/last-month-summary?period=${period}`, {
+      const response = await api.get(`/reports/last-month-summary?period=${period}`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -109,7 +110,7 @@ const reportService = {
   getEmployeeDashboard: async (period = 'this_month') => {
     try {
       const token = localStorage.getItem('authToken');
-      const response = await axios.get(`${API_URL}/reports/employee-dashboard?period=${period}`, {
+      const response = await api.get(`/reports/employee-dashboard?period=${period}`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -140,7 +141,7 @@ const reportService = {
   getCobranzasDashboard: async (period = 'this_month') => {
     try {
       const token = localStorage.getItem('authToken');
-      const response = await axios.get(`${API_URL}/reports/cobranzas-dashboard?period=${period}`, {
+      const response = await api.get(`/reports/cobranzas-dashboard?period=${period}`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -157,7 +158,7 @@ const reportService = {
   getCollectionsDetailedReport: async () => {
     try {
       const token = localStorage.getItem('authToken');
-      const response = await axios.get(`${API_URL}/reports/collections-detailed`, {
+      const response = await api.get(`/reports/collections-detailed`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -174,7 +175,7 @@ const reportService = {
   getCollectionsFullReport: async () => {
     try {
       const token = localStorage.getItem('authToken');
-      const response = await axios.get(`${API_URL}/reports/collections-full-report`, {
+      const response = await api.get(`/reports/collections-full-report`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -191,7 +192,7 @@ const reportService = {
   getClientCollectionsHistory: async (clientId, startDate = null, endDate = null) => {
     try {
       const token = localStorage.getItem('authToken');
-      let url = `${API_URL}/reports/collections-history/${clientId}`;
+      let url = `/reports/collections-history/${clientId}`;
       const params = [];
       
       if (startDate) {
@@ -205,7 +206,7 @@ const reportService = {
         url += `?${params.join('&')}`;
       }
       
-      const response = await axios.get(url, {
+      const response = await api.get(url, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -331,3 +332,6 @@ const reportService = {
 };
 
 export default reportService;
+
+
+

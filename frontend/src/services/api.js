@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // Configuración base de la API
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
 // Crear instancia de axios
 const api = axios.create({
@@ -244,27 +244,27 @@ export const bookingService = {
 // Servicios de requerimientos
 export const requirementService = {
   getRequirements: async (params = {}) => {
-    const response = await api.get('/requirements', { params });
+    const response = await api.get('/reports/requirements', { params });
     return response.data;
   },
 
   getRequirement: async (id) => {
-    const response = await api.get(`/requirements/${id}`);
+    const response = await api.get(`/reports/requirements/${id}`);
     return response.data;
   },
 
   createRequirement: async (requirementData) => {
-    const response = await api.post('/requirements', requirementData);
+    const response = await api.post('/reports/requirements', requirementData);
     return response.data;
   },
 
   updateRequirementStatus: async (id, statusData) => {
-    const response = await api.patch(`/requirements/${id}/status`, statusData);
+    const response = await api.patch(`/reports/requirements/${id}/status`, statusData);
     return response.data;
   },
 
   deleteRequirement: async (id) => {
-    const response = await api.delete(`/requirements/${id}`);
+    const response = await api.delete(`/reports/requirements/${id}`);
     return response.data;
   },
 
@@ -650,4 +650,12 @@ export const reportService = {
 };
 
 export default api;
+export { api };
+
+
+
+
+
+
+
 
