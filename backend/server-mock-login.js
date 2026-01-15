@@ -519,6 +519,33 @@ app.post('/api/payments', (req, res) => {
   }
 });
 
+// Obtener pagos de un cliente específico
+app.get('/api/payments/client/:clientId', (req, res) => {
+  const token = req.headers.authorization?.replace('Bearer ', '');
+  
+  if (!token) {
+    return res.status(401).json({ error: 'No token' });
+  }
+
+  try {
+    jwt.verify(token, JWT_SECRET);
+    
+    const clientId = parseInt(req.params.clientId);
+    const clientPayments = payments.filter(p => p.client_id === clientId);
+    
+    res.json({
+      ok: true,
+      payments: clientPayments,
+      total: clientPayments.length
+    });
+  } catch (err) {
+    res.status(401).json({
+      error: 'Token inválido',
+      message: err.message
+    });
+  }
+});
+
 // Health check
 app.get('/api/health', (req, res) => {
   res.json({
@@ -1250,4 +1277,6 @@ app.listen(PORT, '0.0.0.0', () => {
   console.log('   â€¢ cobranzas (Kempery2025+) - Rol: employee');
   console.log('\nâœ… CORS habilitado para http://localhost:3000\n');
 });
+
+
 
