@@ -667,9 +667,24 @@ app.get('/api/reports/employee-dashboard', (req, res) => {
     res.json({
       ok: true,
       data: {
-        tasks_completed: 15,
-        tasks_pending: 3,
-        performance: 85
+        totalClients: 25,
+        unpaidClients: 5,
+        totalDebt: 15000,
+        collectedAmount: 12000,
+        pendingAmount: 3000,
+        collectionRate: 80,
+        periodSummary: {
+          sales: {
+            total_ventas: 15000,
+            ventas_completadas: 12000,
+            ventas_pendientes: 3000
+          },
+          collections: {
+            total_cobrado: 12000,
+            total_por_cobrar: 3000,
+            tasa_cobranza: 80
+          }
+        }
       }
     });
   } catch (err) {

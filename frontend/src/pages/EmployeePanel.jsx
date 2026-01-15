@@ -785,7 +785,11 @@ const EmployeePanel = () => {
       
       // Cargar datos del período seleccionado
       const periodData = await reportService.getEmployeeDashboard(dashboardPeriod)
-      setPeriodSummary(periodData)
+      setPeriodSummary(periodData?.periodSummary || {
+        sales: { total_ventas: 0, total_monto: 0, ventas_pagadas: 0, monto_pagado: 0 },
+        bookings: { total_reservas: 0, total_monto: 0, confirmadas: 0, canceladas: 0 },
+        requirements: { total_requerimientos: 0, completados: 0, pendientes: 0 }
+      })
       
       // Cargar datos específicos de reservas y requerimientos
       const bookingsResponse = await bookingService.getBookings()
@@ -1806,19 +1810,19 @@ Agradecemos su preferencia y esperamos que tenga una excelente estadía.`;
             <div className="flex justify-between items-center">
               <span className="text-sm text-gray-600">Total Ventas:</span>
               <span className="font-semibold text-blue-600">
-                {dashboardLoading ? '...' : periodSummary.sales.total_ventas}
+                {dashboardLoading ? '...' : periodSummary?.sales?.total_ventas ?? 0}
               </span>
             </div>
             <div className="flex justify-between items-center">
               <span className="text-sm text-gray-600">Monto Total:</span>
               <span className="font-semibold text-blue-600">
-                {dashboardLoading ? '...' : formatCurrency(periodSummary.sales.total_monto)}
+                {dashboardLoading ? '...' : formatCurrency(periodSummary?.sales?.total_monto ?? 0)}
               </span>
             </div>
             <div className="flex justify-between items-center">
               <span className="text-sm text-gray-600">Ventas Pagadas:</span>
               <span className="font-semibold text-green-600">
-                {dashboardLoading ? '...' : periodSummary.sales.ventas_pagadas}
+                {dashboardLoading ? '...' : periodSummary?.sales?.ventas_pagadas ?? 0}
               </span>
             </div>
           </div>
@@ -1830,25 +1834,25 @@ Agradecemos su preferencia y esperamos que tenga una excelente estadía.`;
             <div className="flex justify-between items-center">
               <span className="text-sm text-gray-600">Total Reservas:</span>
               <span className="font-semibold text-green-600">
-                {dashboardLoading ? '...' : periodSummary.bookings.total_reservas}
+                {dashboardLoading ? '...' : periodSummary?.bookings?.total_reservas ?? 0}
               </span>
             </div>
             <div className="flex justify-between items-center">
               <span className="text-sm text-gray-600">Monto Total:</span>
               <span className="font-semibold text-green-600">
-                {dashboardLoading ? '...' : formatCurrency(periodSummary.bookings.total_monto)}
+                {dashboardLoading ? '...' : formatCurrency(periodSummary?.bookings?.total_monto ?? 0)}
               </span>
             </div>
             <div className="flex justify-between items-center">
               <span className="text-sm text-gray-600">Confirmadas:</span>
               <span className="font-semibold text-green-600">
-                {dashboardLoading ? '...' : periodSummary.bookings.confirmadas}
+                {dashboardLoading ? '...' : periodSummary?.bookings?.confirmadas ?? 0}
               </span>
             </div>
             <div className="flex justify-between items-center">
               <span className="text-sm text-gray-600">Canceladas:</span>
               <span className="font-semibold text-red-600">
-                {dashboardLoading ? '...' : periodSummary.bookings.canceladas}
+                {dashboardLoading ? '...' : periodSummary?.bookings?.canceladas ?? 0}
               </span>
             </div>
           </div>
@@ -1860,19 +1864,19 @@ Agradecemos su preferencia y esperamos que tenga una excelente estadía.`;
             <div className="flex justify-between items-center">
               <span className="text-sm text-gray-600">Total Requerimientos:</span>
               <span className="font-semibold text-purple-600">
-                {dashboardLoading ? '...' : periodSummary.requirements.total_requerimientos}
+                {dashboardLoading ? '...' : periodSummary?.requirements?.total_requerimientos ?? 0}
               </span>
             </div>
             <div className="flex justify-between items-center">
               <span className="text-sm text-gray-600">Completados:</span>
               <span className="font-semibold text-green-600">
-                {dashboardLoading ? '...' : periodSummary.requirements.completados}
+                {dashboardLoading ? '...' : periodSummary?.requirements?.completados ?? 0}
               </span>
             </div>
             <div className="flex justify-between items-center">
               <span className="text-sm text-gray-600">Pendientes:</span>
               <span className="font-semibold text-orange-600">
-                {dashboardLoading ? '...' : periodSummary.requirements.pendientes}
+                {dashboardLoading ? '...' : periodSummary?.requirements?.pendientes ?? 0}
               </span>
             </div>
           </div>
@@ -5562,3 +5566,4 @@ Agradecemos su preferencia y esperamos que tenga una excelente estadía.`;
 }
 
 export default EmployeePanel
+

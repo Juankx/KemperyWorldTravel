@@ -115,10 +115,24 @@ const reportService = {
           'Content-Type': 'application/json'
         }
       });
-      return response.data;
+      // Retornar datos con estructura por defecto si no existen
+      return response.data?.data || {
+        periodSummary: {
+          sales: { total_ventas: 0, total_monto: 0, ventas_pagadas: 0, monto_pagado: 0 },
+          bookings: { total_reservas: 0, total_monto: 0, confirmadas: 0, canceladas: 0 },
+          requirements: { total_requerimientos: 0, completados: 0, pendientes: 0 }
+        }
+      };
     } catch (error) {
       console.error('Error obteniendo datos del dashboard para empleados:', error);
-      throw error;
+      // Retornar estructura vacía en caso de error para evitar crash
+      return {
+        periodSummary: {
+          sales: { total_ventas: 0, total_monto: 0, ventas_pagadas: 0, monto_pagado: 0 },
+          bookings: { total_reservas: 0, total_monto: 0, confirmadas: 0, canceladas: 0 },
+          requirements: { total_requerimientos: 0, completados: 0, pendientes: 0 }
+        }
+      };
     }
   },
 
@@ -132,7 +146,7 @@ const reportService = {
           'Content-Type': 'application/json'
         }
       });
-      return response.data;
+      return response.data.data;
     } catch (error) {
       console.error('Error obteniendo datos del dashboard para cobranzas:', error);
       throw error;
