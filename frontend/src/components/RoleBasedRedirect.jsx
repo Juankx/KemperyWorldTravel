@@ -16,24 +16,21 @@ const RoleBasedRedirect = () => {
     )
   }
 
-  // Redirigir segÃºn el rol del usuario
+  // Redirigir según el rol del usuario
   switch (user.role) {
     case 'admin':
       return <AdminPanel />
+    case 'cobranza':
+      return <CobranzasPanel />
     case 'employee':
-      // Verificar si es el usuario de cobranzas
-      if (user.email === 'Cobranzas') {
-        return <CobranzasPanel />
-      } else {
-        // Paola y Cristhian van al panel de empleados
-        return <EmployeePanel />
-      }
+    case 'agent':
+      return <EmployeePanel />
     default:
       return (
         <div className="min-h-screen bg-gray-100 flex items-center justify-center">
           <div className="bg-white p-8 rounded-lg shadow-lg text-center">
             <h2 className="text-2xl font-bold text-red-600 mb-4">Rol No Reconocido</h2>
-            <p className="text-gray-600">Tu rol de usuario no estÃ¡ configurado correctamente.</p>
+            <p className="text-gray-600">Tu rol de usuario no está configurado correctamente.</p>
           </div>
         </div>
       )

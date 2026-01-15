@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+﻿import React, { useState, useEffect } from 'react'
 import { useAuth } from '../contexts/AuthContext'
 import { 
   Users, 
@@ -27,7 +27,7 @@ const CobranzasPanel = () => {
   const [activeModule, setActiveModule] = useState('dashboard')
   const [sidebarOpen, setSidebarOpen] = useState(false)
   
-  // Estados para cada módulo
+  // Estados para cada mÃ³dulo
   const [clients, setClients] = useState([])
   const [payments, setPayments] = useState([])
   const [paymentAgreements, setPaymentAgreements] = useState([])
@@ -52,7 +52,7 @@ const CobranzasPanel = () => {
   const [clientManagements, setClientManagements] = useState([])
   const [loadingManagements, setLoadingManagements] = useState(false)
   
-  // Estados para módulo de historial completo
+  // Estados para mÃ³dulo de historial completo
   const [collectionsHistoryData, setCollectionsHistoryData] = useState(null)
   const [collectionsHistoryLoading, setCollectionsHistoryLoading] = useState(false)
   const [collectionsHistoryFilters, setCollectionsHistoryFilters] = useState({
@@ -93,7 +93,7 @@ const CobranzasPanel = () => {
   const [deleteAllAgreementsPassword, setDeleteAllAgreementsPassword] = useState('')
   const [deleteAllAgreementsPasswordError, setDeleteAllAgreementsPasswordError] = useState('')
   
-  // Estados para editar fecha de vencimiento del pagaré
+  // Estados para editar fecha de vencimiento del pagarÃ©
   const [editingDueDate, setEditingDueDate] = useState(false)
   const [dueDateValue, setDueDateValue] = useState(null)
   const [savingDueDate, setSavingDueDate] = useState(false)
@@ -173,14 +173,22 @@ const CobranzasPanel = () => {
     collections: { total_cobranzas: 0, total_monto: 0, cobranzas_pagadas: 0, monto_pagado: 0 }
   })
 
-  // Resetear a página 1 cuando cambia el término de búsqueda o el módulo
+  // Limpiar estado cuando cambia de usuario
+  useEffect(() => {
+    setPeriodSummary({
+      sales: { total_ventas: 0, total_monto: 0, ventas_pagadas: 0, monto_pagado: 0 },
+      collections: { total_cobranzas: 0, total_monto: 0, cobranzas_pagadas: 0, monto_pagado: 0 }
+    })
+  }, [user?.id])
+
+  // Resetear a pÃ¡gina 1 cuando cambia el tÃ©rmino de bÃºsqueda o el mÃ³dulo
   useEffect(() => {
     if (activeModule === 'clients') {
       setCurrentPage(1)
     }
   }, [searchTerm, activeModule])
 
-  // Cargar datos según el módulo activo
+  // Cargar datos segÃºn el mÃ³dulo activo
   useEffect(() => {
     if (activeModule === 'dashboard') {
       loadDashboardData()
@@ -200,7 +208,7 @@ const CobranzasPanel = () => {
   const loadClients = async () => {
     try {
       setLoading(true)
-      // Cargar todos los clientes para filtrar los que están en cobranzas
+      // Cargar todos los clientes para filtrar los que estÃ¡n en cobranzas
       const response = await clientService.getClients({ 
         limit: 1000, 
         search: searchTerm 
@@ -211,7 +219,7 @@ const CobranzasPanel = () => {
         client.in_collections === 'Si' || client.in_collections === 'true'
       ) || []
       
-      // Aplicar paginación manual
+      // Aplicar paginaciÃ³n manual
       const clientsPerPage = 20
       const startIndex = (currentPage - 1) * clientsPerPage
       const endIndex = startIndex + clientsPerPage
@@ -231,7 +239,7 @@ const CobranzasPanel = () => {
     }
   }
 
-  // Cargar clientes en cobranzas con paginación
+  // Cargar clientes en cobranzas con paginaciÃ³n
   const loadUnpaidClients = async (page = 1, search = '') => {
     try {
       setLoading(true)
@@ -239,7 +247,7 @@ const CobranzasPanel = () => {
       const response = await clientService.getClients({ limit: 1000 })
       const allCollectionClients = response.clients?.filter(client => client.in_collections === 'Si') || []
       
-      // Aplicar búsqueda si existe
+      // Aplicar bÃºsqueda si existe
       let filteredClients = allCollectionClients
       if (search) {
         const searchLower = search.toLowerCase().trim()
@@ -256,7 +264,7 @@ const CobranzasPanel = () => {
         })
       }
       
-      // Implementar paginación manual
+      // Implementar paginaciÃ³n manual
       const clientsPerPage = 20
       const startIndex = (page - 1) * clientsPerPage
       const endIndex = startIndex + clientsPerPage
@@ -294,9 +302,9 @@ const CobranzasPanel = () => {
   const loadAgreements = async () => {
     try {
       setLoading(true)
-      // Resetear a página 1 si hay un término de búsqueda
+      // Resetear a pÃ¡gina 1 si hay un tÃ©rmino de bÃºsqueda
       const pageToLoad = searchTerm ? 1 : currentPage
-      console.log('Cargando convenios con parámetros:', { page: pageToLoad, limit: 20, search: searchTerm })
+      console.log('Cargando convenios con parÃ¡metros:', { page: pageToLoad, limit: 20, search: searchTerm })
       const response = await paymentAgreementService.getPaymentAgreements({
         page: pageToLoad,
         limit: 20,
@@ -323,7 +331,7 @@ const CobranzasPanel = () => {
   const loadPaymentAgreements = async () => {
     try {
       setLoading(true)
-      // Simular carga de convenios - aquí deberías usar el servicio real
+      // Simular carga de convenios - aquÃ­ deberÃ­as usar el servicio real
       setPaymentAgreements([])
     } catch (error) {
       console.error('Error loading payment agreements:', error)
@@ -337,7 +345,7 @@ const CobranzasPanel = () => {
     try {
       const response = await paymentAgreementService.getPaymentAgreementsByClient(clientId)
       if (response.agreements && response.agreements.length > 0) {
-        // Obtener el convenio más reciente (ya viene ordenado por created_at DESC)
+        // Obtener el convenio mÃ¡s reciente (ya viene ordenado por created_at DESC)
         const agreement = response.agreements[0]
         setClientPaymentAgreement(agreement)
         // Si hay una fecha de vencimiento, inicializar el valor del editor
@@ -440,7 +448,7 @@ const CobranzasPanel = () => {
     }
   }
 
-  // Guardar fecha de vencimiento del pagaré
+  // Guardar fecha de vencimiento del pagarÃ©
   const handleSaveDueDate = async () => {
     if (!dueDateValue || !clientPaymentAgreement) {
       alert('Por favor, selecciona una fecha')
@@ -499,7 +507,7 @@ const CobranzasPanel = () => {
     setShowAgreementModal(true)
   }
 
-  // Función para manejar el botón unificado de pago/convenio/gestión
+  // FunciÃ³n para manejar el botÃ³n unificado de pago/convenio/gestiÃ³n
   const handlePaymentAction = (client, action) => {
     if (action === 'payment') {
       handleAddPayment(client)
@@ -510,7 +518,7 @@ const CobranzasPanel = () => {
     }
   }
 
-  // Función para abrir modal de gestión
+  // FunciÃ³n para abrir modal de gestiÃ³n
   const handleAddManagement = (client) => {
     setSelectedClientForManagement(client)
     setManagementFormData({
@@ -522,17 +530,17 @@ const CobranzasPanel = () => {
     setShowManagementModal(true)
   }
 
-  // Función para guardar gestión
+  // FunciÃ³n para guardar gestiÃ³n
   const handleSaveManagement = async () => {
     try {
       if (!managementFormData.observation || managementFormData.observation.trim() === '') {
-        alert('Por favor, ingresa una observación')
+        alert('Por favor, ingresa una observaciÃ³n')
         return
       }
       
       setLoading(true)
       await clientManagementService.createClientManagement(managementFormData)
-      alert('Gestión registrada exitosamente')
+      alert('GestiÃ³n registrada exitosamente')
       setShowManagementModal(false)
       setSelectedClientForManagement(null)
       setManagementFormData({
@@ -547,17 +555,18 @@ const CobranzasPanel = () => {
       }
     } catch (error) {
       console.error('Error saving management:', error)
-      alert('Error al guardar la gestión: ' + (error.response?.data?.error || error.message))
+      alert('Error al guardar la gestiÃ³n: ' + (error.response?.data?.error || error.message))
     } finally {
       setLoading(false)
     }
   }
   
-  // Función para guardar pago
+  // FunciÃ³n para guardar pago
   const handleSavePayment = async () => {
     try {
-      if (!paymentFormData.payment_amount || !paymentFormData.payment_method) {
-        alert('Por favor, completa todos los campos requeridos')
+      if (!paymentFormData.client_id || !paymentFormData.payment_amount || 
+          !paymentFormData.payment_date || !paymentFormData.payment_method) {
+        alert('Por favor, completa todos los campos requeridos (Cliente, Monto, Fecha y MÃ©todo de Pago)')
         return
       }
       
@@ -572,7 +581,7 @@ const CobranzasPanel = () => {
       await paymentService.createPayment(paymentData)
       alert('Pago registrado exitosamente')
       
-      // Recargar datos del cliente si el modal de detalles está abierto
+      // Recargar datos del cliente si el modal de detalles estÃ¡ abierto
       if (selectedClient) {
         await loadClientPayments(selectedClient.id)
         await loadClientPaymentAgreement(selectedClient.id)
@@ -599,19 +608,19 @@ const CobranzasPanel = () => {
     }
   }
   
-  // Función para ver detalles de un pago
+  // FunciÃ³n para ver detalles de un pago
   const handleViewPayment = (payment) => {
     setSelectedPayment(payment)
     setShowPaymentDetails(true)
   }
 
-  // Función para ver detalles de un convenio
+  // FunciÃ³n para ver detalles de un convenio
   const handleViewAgreement = (agreement) => {
     setSelectedAgreement(agreement)
     setShowAgreementDetails(true)
   }
   
-  // Función para abrir modal de eliminación de pago
+  // FunciÃ³n para abrir modal de eliminaciÃ³n de pago
   const handleDeletePaymentClick = (payment) => {
     setSelectedPayment(payment)
     setShowDeletePaymentModal(true)
@@ -619,15 +628,15 @@ const CobranzasPanel = () => {
     setDeletePasswordError('')
   }
   
-  // Función para confirmar eliminación de pago
+  // FunciÃ³n para confirmar eliminaciÃ³n de pago
   const handleConfirmDeletePayment = async () => {
     if (!deletePassword) {
-      setDeletePasswordError('Por favor, ingresa la contraseña')
+      setDeletePasswordError('Por favor, ingresa la contraseÃ±a')
       return
     }
     
     if (deletePassword !== 'admin2025') {
-      setDeletePasswordError('Contraseña incorrecta')
+      setDeletePasswordError('ContraseÃ±a incorrecta')
       return
     }
     
@@ -649,7 +658,7 @@ const CobranzasPanel = () => {
     }
   }
 
-  // Función para abrir modal de eliminación de convenio
+  // FunciÃ³n para abrir modal de eliminaciÃ³n de convenio
   const handleDeleteAgreementClick = (agreement) => {
     setSelectedAgreement(agreement)
     setShowDeleteAgreementModal(true)
@@ -657,15 +666,15 @@ const CobranzasPanel = () => {
     setDeleteAgreementPasswordError('')
   }
   
-  // Función para confirmar eliminación de convenio
+  // FunciÃ³n para confirmar eliminaciÃ³n de convenio
   const handleConfirmDeleteAgreement = async () => {
     if (!deleteAgreementPassword) {
-      setDeleteAgreementPasswordError('Por favor, ingresa la contraseña')
+      setDeleteAgreementPasswordError('Por favor, ingresa la contraseÃ±a')
       return
     }
     
     if (deleteAgreementPassword !== 'admin2025') {
-      setDeleteAgreementPasswordError('Contraseña incorrecta')
+      setDeleteAgreementPasswordError('ContraseÃ±a incorrecta')
       return
     }
     
@@ -689,22 +698,22 @@ const CobranzasPanel = () => {
     }
   }
 
-  // Función para abrir modal de eliminación de todos los convenios
+  // FunciÃ³n para abrir modal de eliminaciÃ³n de todos los convenios
   const handleDeleteAllAgreementsClick = () => {
     setShowDeleteAllAgreementsModal(true)
     setDeleteAllAgreementsPassword('')
     setDeleteAllAgreementsPasswordError('')
   }
 
-  // Función para confirmar eliminación de todos los convenios
+  // FunciÃ³n para confirmar eliminaciÃ³n de todos los convenios
   const handleConfirmDeleteAllAgreements = async () => {
     if (!deleteAllAgreementsPassword) {
-      setDeleteAllAgreementsPasswordError('Por favor, ingresa la contraseña')
+      setDeleteAllAgreementsPasswordError('Por favor, ingresa la contraseÃ±a')
       return
     }
     
     if (deleteAllAgreementsPassword !== 'admin2025') {
-      setDeleteAllAgreementsPasswordError('Contraseña incorrecta')
+      setDeleteAllAgreementsPasswordError('ContraseÃ±a incorrecta')
       return
     }
     
@@ -727,7 +736,7 @@ const CobranzasPanel = () => {
     }
   }
   
-  // Función para guardar convenio
+  // FunciÃ³n para guardar convenio
   const handleSaveAgreement = async () => {
     try {
       if (!agreementFormData.total_amount || !agreementFormData.installment_count) {
@@ -747,7 +756,7 @@ const CobranzasPanel = () => {
       await paymentAgreementService.createPaymentAgreement(agreementData)
       alert('Convenio creado exitosamente')
       
-      // Recargar datos del cliente si el modal de detalles está abierto
+      // Recargar datos del cliente si el modal de detalles estÃ¡ abierto
       if (selectedClient) {
         await loadClientAgreements(selectedClient.id)
         await loadClientPaymentAgreement(selectedClient.id)
@@ -755,7 +764,7 @@ const CobranzasPanel = () => {
         await loadClients(currentPage, searchTerm)
       }
       
-      // Recargar lista de convenios si estamos en el módulo de convenios
+      // Recargar lista de convenios si estamos en el mÃ³dulo de convenios
       if (activeModule === 'agreements') {
         await loadAgreements()
       }
@@ -794,7 +803,7 @@ const CobranzasPanel = () => {
     }
   }
 
-  // Cargar historial completo de un cliente específico
+  // Cargar historial completo de un cliente especÃ­fico
   const loadClientHistory = async (clientId, startDate = null, endDate = null) => {
     try {
       setLoadingClientHistory(true)
@@ -808,7 +817,7 @@ const CobranzasPanel = () => {
     }
   }
 
-  // Función para buscar gestiones por rango de fechas
+  // FunciÃ³n para buscar gestiones por rango de fechas
   const handleSearchManagementsByDate = () => {
     if (!collectionsHistoryFilters.startDate || !collectionsHistoryFilters.endDate) {
       return
@@ -822,11 +831,11 @@ const CobranzasPanel = () => {
         collectionsHistoryFilters.endDate
       )
     }
-    // El filtro se aplica automáticamente en el renderizado gracias al estado de collectionsHistoryFilters
-    // React re-renderizará automáticamente cuando cambien los filtros
+    // El filtro se aplica automÃ¡ticamente en el renderizado gracias al estado de collectionsHistoryFilters
+    // React re-renderizarÃ¡ automÃ¡ticamente cuando cambien los filtros
   }
 
-  // Función para ver historial completo de un cliente
+  // FunciÃ³n para ver historial completo de un cliente
   const handleViewClientHistory = async (client) => {
     setSelectedClientForHistory(client)
     setShowClientHistoryModal(true)
@@ -836,7 +845,7 @@ const CobranzasPanel = () => {
     await loadClientHistory(client.id, startDate, endDate)
   }
 
-  // Función para ver historial de gestiones (ahora incluye pagos y convenios)
+  // FunciÃ³n para ver historial de gestiones (ahora incluye pagos y convenios)
   const handleViewManagementHistory = async (client) => {
     setSelectedClientForHistory(client)
     setShowManagementHistoryModal(true)
@@ -860,12 +869,12 @@ const CobranzasPanel = () => {
     }
   }
 
-  // Función para manejar cambios en el formulario de convenio
+  // FunciÃ³n para manejar cambios en el formulario de convenio
   const handleAgreementFormChange = (field, value) => {
     setAgreementFormData(prev => {
       const newData = { ...prev, [field]: value }
       
-      // Calcular monto por cuota automáticamente
+      // Calcular monto por cuota automÃ¡ticamente
       if (field === 'total_amount' || field === 'installment_count') {
         const total = parseFloat(newData.total_amount) || 0
         const count = parseInt(newData.installment_count) || 0
@@ -874,14 +883,14 @@ const CobranzasPanel = () => {
         }
       }
       
-      // Calcular fecha de fin automáticamente (cuotas mensuales)
+      // Calcular fecha de fin automÃ¡ticamente (cuotas mensuales)
       if (field === 'start_date' || field === 'installment_count') {
         const startDate = newData.start_date
         const installmentCount = parseInt(newData.installment_count) || 0
         
         if (startDate && installmentCount > 0) {
           const start = new Date(startDate)
-          // Agregar el número de cuotas en meses
+          // Agregar el nÃºmero de cuotas en meses
           start.setMonth(start.getMonth() + installmentCount)
           newData.end_date = start.toISOString().split('T')[0]
         }
@@ -891,7 +900,7 @@ const CobranzasPanel = () => {
     })
   }
 
-  // Función para cargar resumen de pagos
+  // FunciÃ³n para cargar resumen de pagos
   const loadPaymentsSummary = async () => {
     try {
       setPaymentsSummaryLoading(true)
@@ -908,7 +917,7 @@ const CobranzasPanel = () => {
       const currentMonth = currentDate.getMonth() + 1
       const currentYear = currentDate.getFullYear()
       
-      // Calcular fechas para el último mes
+      // Calcular fechas para el Ãºltimo mes
       const lastMonthStart = new Date(lastYear, lastMonth, 1).toISOString().split('T')[0]
       const lastMonthEnd = new Date(lastYear, lastMonth + 1, 0).toISOString().split('T')[0]
       
@@ -916,7 +925,7 @@ const CobranzasPanel = () => {
       const currentMonthStart = new Date(currentYear, currentMonth - 1, 1).toISOString().split('T')[0]
       const currentMonthEnd = new Date(currentYear, currentMonth, 0).toISOString().split('T')[0]
       
-      // Resumen del último período (mes pasado) - usar endpoint de payments con start_date y end_date
+      // Resumen del Ãºltimo perÃ­odo (mes pasado) - usar endpoint de payments con start_date y end_date
       let lastPeriodData = {
         totalPayments: 0,
         collectedAmount: 0,
@@ -940,10 +949,10 @@ const CobranzasPanel = () => {
           }
         }
       } catch (error) {
-        console.error('Error cargando último período:', error)
+        console.error('Error cargando Ãºltimo perÃ­odo:', error)
       }
       
-      // Resumen del período actual
+      // Resumen del perÃ­odo actual
       let currentPeriodData = {
         totalPending: 0,
         overdueAmount: 0,
@@ -966,7 +975,7 @@ const CobranzasPanel = () => {
           }
         }
       } catch (error) {
-        console.error('Error cargando período actual:', error)
+        console.error('Error cargando perÃ­odo actual:', error)
       }
       
       // Resumen total de deudas pendientes - usar endpoint de payment-agreements
@@ -1006,7 +1015,7 @@ const CobranzasPanel = () => {
     }
   }
 
-  // Función para cargar notificaciones de cobranzas
+  // FunciÃ³n para cargar notificaciones de cobranzas
   const loadNotifications = async () => {
     try {
       setNotificationsLoading(true)
@@ -1025,7 +1034,7 @@ const CobranzasPanel = () => {
         'Content-Type': 'application/json'
       }
       
-      // Cargar pagos del día
+      // Cargar pagos del dÃ­a
       let todayPayments = []
       try {
         const todayPaymentsResponse = await fetch(`${apiUrl}/payments?date=${today}`, { headers })
@@ -1037,7 +1046,7 @@ const CobranzasPanel = () => {
           }
         }
       } catch (error) {
-        console.error('Error cargando pagos del día:', error)
+        console.error('Error cargando pagos del dÃ­a:', error)
       }
       
       // Cargar pagos del mes
@@ -1055,7 +1064,7 @@ const CobranzasPanel = () => {
         console.error('Error cargando pagos del mes:', error)
       }
       
-      // Cargar convenios del día (filtrar por fecha de inicio)
+      // Cargar convenios del dÃ­a (filtrar por fecha de inicio)
       let todayAgreements = []
       try {
         const todayAgreementsResponse = await fetch(`${apiUrl}/payment-agreements?limit=1000`, { headers })
@@ -1068,7 +1077,7 @@ const CobranzasPanel = () => {
           }
         }
       } catch (error) {
-        console.error('Error cargando convenios del día:', error)
+        console.error('Error cargando convenios del dÃ­a:', error)
       }
       
       // Cargar convenios del mes (filtrar por rango de fechas)
@@ -1108,21 +1117,21 @@ const CobranzasPanel = () => {
     try {
       setDashboardLoading(true)
       
-      // Cargar estadísticas generales de clientes
+      // Cargar estadÃ­sticas generales de clientes
       const clientsResponse = await clientService.getClientStats()
       const stats = clientsResponse.stats
       
-      // Cargar datos del período seleccionado
+      // Cargar datos del perÃ­odo seleccionado
       const periodData = await reportService.getCobranzasDashboard(dashboardPeriod)
       setPeriodSummary(periodData)
       
-      // Calcular métricas específicas de cobranzas
+      // Calcular mÃ©tricas especÃ­ficas de cobranzas
       const totalClients = parseInt(stats.total_clients) || 0
       const unpaidClients = parseInt(stats.unpaid_clients) || 0
       const totalRevenue = parseFloat(stats.total_revenue) || 0
       const paidClients = parseInt(stats.paid_clients) || 0
       
-      // Usar datos del endpoint específico de cobranzas
+      // Usar datos del endpoint especÃ­fico de cobranzas
       const totalSales = parseFloat(periodData.sales?.total_monto) || 0
       const collectedAmount = parseFloat(periodData.sales?.monto_pagado) || 0
       const totalCollections = parseFloat(periodData.collections?.total_monto_cobranzas) || 0
@@ -1169,11 +1178,11 @@ const CobranzasPanel = () => {
 
   const renderDashboard = () => (
     <div className="space-y-6">
-      {/* Selector de período */}
+      {/* Selector de perÃ­odo */}
       <div className="flex justify-between items-center">
         <h2 className="text-2xl font-bold text-gray-900">Dashboard de Cobranzas</h2>
         <div className="flex items-center space-x-4">
-          <label className="text-sm font-medium text-gray-700">Período:</label>
+          <label className="text-sm font-medium text-gray-700">PerÃ­odo:</label>
           <select
             value={dashboardPeriod}
             onChange={(e) => handleDashboardPeriodChange(e.target.value)}
@@ -1188,7 +1197,7 @@ const CobranzasPanel = () => {
 
       {/* Notificaciones de Cobranzas */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Notificaciones del Día */}
+        {/* Notificaciones del DÃ­a */}
         <div className="bg-white p-6 rounded-lg shadow-md">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-lg font-semibold text-gray-900 flex items-center">
@@ -1322,12 +1331,12 @@ const CobranzasPanel = () => {
 
       {/* Resumen de Pagos */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Resumen del Último Período */}
+        {/* Resumen del Ãšltimo PerÃ­odo */}
         <div className="bg-white p-6 rounded-lg shadow-md">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-lg font-semibold text-gray-900 flex items-center">
               <span className="w-3 h-3 bg-green-500 rounded-full mr-2"></span>
-              Último Período
+              Ãšltimo PerÃ­odo
             </h3>
             <span className="text-sm text-gray-500">
               {new Date(new Date().getFullYear(), new Date().getMonth() - 1, 1).toLocaleDateString('es-ES', { month: 'long', year: 'numeric' })}
@@ -1360,12 +1369,12 @@ const CobranzasPanel = () => {
           )}
         </div>
 
-        {/* Resumen del Período Actual */}
+        {/* Resumen del PerÃ­odo Actual */}
         <div className="bg-white p-6 rounded-lg shadow-md">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-lg font-semibold text-gray-900 flex items-center">
               <span className="w-3 h-3 bg-orange-500 rounded-full mr-2"></span>
-              Período Actual
+              PerÃ­odo Actual
             </h3>
             <span className="text-sm text-gray-500">
               {new Date().toLocaleDateString('es-ES', { month: 'long', year: 'numeric' })}
@@ -1440,7 +1449,7 @@ const CobranzasPanel = () => {
         </div>
       </div>
 
-      {/* Métricas principales */}
+      {/* MÃ©tricas principales */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <div className="bg-white p-6 rounded-lg shadow-md">
           <div className="flex items-center">
@@ -1499,57 +1508,57 @@ const CobranzasPanel = () => {
         </div>
       </div>
 
-      {/* Detalles del período */}
+      {/* Detalles del perÃ­odo */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="bg-white p-6 rounded-lg shadow-md">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Ventas del Período</h3>
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">Ventas del PerÃ­odo</h3>
           <div className="space-y-3">
             <div className="flex justify-between items-center">
               <span className="text-sm text-gray-600">Total Ventas:</span>
               <span className="font-semibold text-blue-600">
-                {dashboardLoading ? '...' : periodSummary.sales.total_ventas}
+                {dashboardLoading ? '...' : periodSummary?.sales?.total_ventas ?? 0}
               </span>
             </div>
             <div className="flex justify-between items-center">
               <span className="text-sm text-gray-600">Monto Total:</span>
               <span className="font-semibold text-blue-600">
-                {dashboardLoading ? '...' : formatCurrency(periodSummary.sales.total_monto)}
+                {dashboardLoading ? '...' : formatCurrency(periodSummary?.sales?.total_monto ?? 0)}
               </span>
             </div>
             <div className="flex justify-between items-center">
               <span className="text-sm text-gray-600">Ventas Pagadas:</span>
               <span className="font-semibold text-green-600">
-                {dashboardLoading ? '...' : periodSummary.sales.ventas_pagadas}
+                {dashboardLoading ? '...' : periodSummary?.sales?.ventas_pagadas ?? 0}
               </span>
             </div>
             <div className="flex justify-between items-center">
               <span className="text-sm text-gray-600">Monto Pagado:</span>
               <span className="font-semibold text-green-600">
-                {dashboardLoading ? '...' : formatCurrency(periodSummary.sales.monto_pagado)}
+                {dashboardLoading ? '...' : formatCurrency(periodSummary?.sales?.monto_pagado ?? 0)}
               </span>
             </div>
           </div>
         </div>
 
         <div className="bg-white p-6 rounded-lg shadow-md">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Cobranzas del Período</h3>
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">Cobranzas del PerÃ­odo</h3>
           <div className="space-y-3">
             <div className="flex justify-between items-center">
               <span className="text-sm text-gray-600">Total Cobranzas:</span>
               <span className="font-semibold text-orange-600">
-                {dashboardLoading ? '...' : periodSummary.collections.total_cobranzas}
+                {dashboardLoading ? '...' : periodSummary?.collections?.total_cobranzas ?? 0}
               </span>
             </div>
             <div className="flex justify-between items-center">
               <span className="text-sm text-gray-600">Monto Total:</span>
               <span className="font-semibold text-orange-600">
-                {dashboardLoading ? '...' : formatCurrency(periodSummary.collections.total_monto)}
+                {dashboardLoading ? '...' : formatCurrency(periodSummary?.collections?.total_monto ?? 0)}
               </span>
             </div>
             <div className="flex justify-between items-center">
               <span className="text-sm text-gray-600">Cobranzas Pagadas:</span>
               <span className="font-semibold text-green-600">
-                {dashboardLoading ? '...' : periodSummary.collections.cobranzas_pagadas}
+                {dashboardLoading ? '...' : periodSummary?.collections?.cobranzas_pagadas ?? 0}
               </span>
             </div>
             <div className="flex justify-between items-center">
@@ -1564,7 +1573,7 @@ const CobranzasPanel = () => {
 
       {/* Resumen ejecutivo */}
       <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white p-6 rounded-lg">
-        <h3 className="text-xl font-bold mb-4">📊 Resumen Ejecutivo de Cobranzas</h3>
+        <h3 className="text-xl font-bold mb-4">ðŸ“Š Resumen Ejecutivo de Cobranzas</h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="text-center">
             <div className="text-2xl font-bold">{dashboardData.totalClients}</div>
@@ -1592,7 +1601,7 @@ const CobranzasPanel = () => {
             <p className="text-sm text-gray-600 mt-1">
               Total: <span className="font-semibold">{totalClients}</span> clientes en cobranzas
               {totalPages > 1 && (
-                <> • Página <span className="font-semibold">{currentPage}</span> de <span className="font-semibold">{totalPages}</span></>
+                <> â€¢ PÃ¡gina <span className="font-semibold">{currentPage}</span> de <span className="font-semibold">{totalPages}</span></>
               )}
             </p>
           )}
@@ -1700,7 +1709,7 @@ const CobranzasPanel = () => {
                             <option value="" disabled>Acciones</option>
                             <option value="payment">Agregar Pago</option>
                             <option value="agreement">Agregar Convenio</option>
-                            <option value="management">Agregar Gestión</option>
+                            <option value="management">Agregar GestiÃ³n</option>
                           </select>
                         </div>
                       </div>
@@ -1712,7 +1721,7 @@ const CobranzasPanel = () => {
           </table>
         </div>
         
-        {/* Controles de paginación */}
+        {/* Controles de paginaciÃ³n */}
         {!loading && totalClients > 0 && (
           <div className="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
             <div className="flex-1 flex justify-between sm:hidden">
@@ -1753,7 +1762,7 @@ const CobranzasPanel = () => {
                   Mostrando <span className="font-medium">{((currentPage - 1) * 20) + 1}</span> - <span className="font-medium">{Math.min(currentPage * 20, totalClients)}</span> de{' '}
                   <span className="font-medium">{totalClients}</span> clientes
                   {totalPages > 1 && (
-                    <> (Página <span className="font-medium">{currentPage}</span> de <span className="font-medium">{totalPages}</span>)</>
+                    <> (PÃ¡gina <span className="font-medium">{currentPage}</span> de <span className="font-medium">{totalPages}</span>)</>
                   )}
                 </p>
               </div>
@@ -1778,7 +1787,7 @@ const CobranzasPanel = () => {
                     </svg>
                   </button>
                   
-                  {/* Números de página */}
+                  {/* NÃºmeros de pÃ¡gina */}
                   {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
                     let pageNum;
                     if (totalPages <= 5) {
@@ -1837,7 +1846,21 @@ const CobranzasPanel = () => {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <h2 className="text-2xl font-bold text-gray-900">Pagos</h2>
-        <button className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">
+        <button 
+          onClick={() => {
+            setShowPaymentModal(true)
+            setSelectedClientForPayment(null)
+            setPaymentFormData({
+              client_id: '',
+              contract_number: '',
+              payment_amount: '',
+              payment_date: new Date().toISOString().split('T')[0],
+              payment_method: '',
+              installment_number: '',
+              notes: ''
+            })
+          }}
+          className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">
           <Plus size={16} className="inline mr-2" />
           Nuevo Pago
         </button>
@@ -1861,7 +1884,7 @@ const CobranzasPanel = () => {
                   Fecha
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Método
+                  MÃ©todo
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Recibo
@@ -2121,7 +2144,7 @@ const CobranzasPanel = () => {
           {collectionsHistoryFilters.startDate && collectionsHistoryFilters.endDate && (
             <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-4">
               <p className="text-sm text-blue-800">
-                <strong>Filtro de fechas activo:</strong> Las gestiones se mostrarán filtradas entre{' '}
+                <strong>Filtro de fechas activo:</strong> Las gestiones se mostrarÃ¡n filtradas entre{' '}
                 {new Date(collectionsHistoryFilters.startDate).toLocaleDateString('es-ES')} y{' '}
                 {new Date(collectionsHistoryFilters.endDate).toLocaleDateString('es-ES')} cuando veas el historial de cada cliente.
               </p>
@@ -2130,7 +2153,7 @@ const CobranzasPanel = () => {
           
           {collectionsHistoryData.report
             .filter(clientData => {
-              // Filtro por búsqueda de cliente
+              // Filtro por bÃºsqueda de cliente
               if (collectionsHistoryFilters.clientSearch) {
                 const search = collectionsHistoryFilters.clientSearch.toLowerCase()
                 const matchesSearch = (
@@ -2152,12 +2175,12 @@ const CobranzasPanel = () => {
                   return false
                 }
                 
-                // Crear fechas de comparación (copias para no modificar las originales)
+                // Crear fechas de comparaciÃ³n (copias para no modificar las originales)
                 const startDate = new Date(collectionsHistoryFilters.startDate)
-                startDate.setHours(0, 0, 0, 0) // Iniciar desde el inicio del día
+                startDate.setHours(0, 0, 0, 0) // Iniciar desde el inicio del dÃ­a
                 
                 const endDate = new Date(collectionsHistoryFilters.endDate)
-                endDate.setHours(23, 59, 59, 999) // Incluir todo el día final
+                endDate.setHours(23, 59, 59, 999) // Incluir todo el dÃ­a final
                 
                 // Verificar si el cliente tiene gestiones en el rango de fechas
                 const hasManagementsInRange = managementsList.some(m => {
@@ -2165,10 +2188,10 @@ const CobranzasPanel = () => {
                   
                   try {
                     const managementDate = new Date(m.management_date)
-                    managementDate.setHours(0, 0, 0, 0) // Normalizar a inicio del día
+                    managementDate.setHours(0, 0, 0, 0) // Normalizar a inicio del dÃ­a
                     return managementDate >= startDate && managementDate <= endDate
                   } catch (error) {
-                    console.error('Error procesando fecha de gestión:', error, m)
+                    console.error('Error procesando fecha de gestiÃ³n:', error, m)
                     return false
                   }
                 })
@@ -2321,7 +2344,7 @@ const CobranzasPanel = () => {
             className="w-full flex items-center px-3 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900 rounded-md"
           >
             <LogOut size={20} className="mr-3" />
-            Cerrar Sesión
+            Cerrar SesiÃ³n
           </button>
         </div>
       </div>
@@ -2381,11 +2404,11 @@ const CobranzasPanel = () => {
               <p className="mt-1 text-sm text-gray-900">{selectedClient.email}</p>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700">Teléfono</label>
+              <label className="block text-sm font-medium text-gray-700">TelÃ©fono</label>
               <p className="mt-1 text-sm text-gray-900">{selectedClient.phone || 'No especificado'}</p>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700">Cédula</label>
+              <label className="block text-sm font-medium text-gray-700">CÃ©dula</label>
               <p className="mt-1 text-sm text-gray-900">{selectedClient.identification || 'No especificado'}</p>
             </div>
             <div>
@@ -2418,15 +2441,15 @@ const CobranzasPanel = () => {
               <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
                 selectedClient.in_collections === 'Si' ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'
               }`}>
-                {selectedClient.in_collections === 'Si' ? 'Sí' : 'No'}
+                {selectedClient.in_collections === 'Si' ? 'SÃ­' : 'No'}
               </span>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700">Años de Duración del Contrato</label>
-              <p className="mt-1 text-sm text-gray-900">{selectedClient.years ? `${selectedClient.years} años` : 'No especificado'}</p>
+              <label className="block text-sm font-medium text-gray-700">AÃ±os de DuraciÃ³n del Contrato</label>
+              <p className="mt-1 text-sm text-gray-900">{selectedClient.years ? `${selectedClient.years} aÃ±os` : 'No especificado'}</p>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700">Fecha de Vencimiento del Pagaré</label>
+              <label className="block text-sm font-medium text-gray-700">Fecha de Vencimiento del PagarÃ©</label>
               {clientPaymentAgreement && clientPaymentAgreement.due_date ? (
                 <div className="flex items-center gap-2">
                   <p className="mt-1 text-sm font-semibold text-orange-600">
@@ -2478,7 +2501,7 @@ const CobranzasPanel = () => {
             </div>
           </div>
 
-          {/* Sección de Pagos */}
+          {/* SecciÃ³n de Pagos */}
           <div className="mt-6 border-t border-gray-200 pt-6">
             <h4 className="text-lg font-semibold text-gray-900 mb-4">Pagos Registrados</h4>
             {clientPayments.length > 0 ? (
@@ -2506,7 +2529,7 @@ const CobranzasPanel = () => {
             )}
           </div>
 
-          {/* Sección de Convenios */}
+          {/* SecciÃ³n de Convenios */}
           <div className="mt-6 border-t border-gray-200 pt-6">
             <h4 className="text-lg font-semibold text-gray-900 mb-4">Convenios de Pago</h4>
             {clientAgreements.length > 0 ? (
@@ -2538,7 +2561,7 @@ const CobranzasPanel = () => {
             )}
           </div>
 
-          {/* Sección de Comentarios */}
+          {/* SecciÃ³n de Comentarios */}
           <div className="mt-6 border-t border-gray-200 pt-6">
             <h4 className="text-lg font-semibold text-gray-900 mb-4">Comentarios de Cobranzas</h4>
             
@@ -2592,14 +2615,36 @@ const CobranzasPanel = () => {
     )}
 
     {/* Modal de agregar pago */}
-    {showPaymentModal && selectedClientForPayment && (
+    {showPaymentModal && (
       <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
         <div className="bg-white rounded-lg p-6 w-full max-w-md">
           <h3 className="text-lg font-semibold text-gray-900 mb-4">
-            Agregar Pago - {selectedClientForPayment.first_name} {selectedClientForPayment.last_name}
+            Agregar Pago {selectedClientForPayment ? `- ${selectedClientForPayment.first_name} ${selectedClientForPayment.last_name}` : ''}
           </h3>
-          
+
           <form className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Cliente</label>
+              <select
+                value={paymentFormData.client_id}
+                onChange={(e) => {
+                  const selectedClient = clients.find(c => c.id === parseInt(e.target.value))
+                  setPaymentFormData({
+                    ...paymentFormData,
+                    client_id: e.target.value,
+                    client_name: selectedClient ? `${selectedClient.first_name} ${selectedClient.last_name}` : ''
+                  })
+                }}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="">Seleccionar cliente...</option>
+                {clients.map(client => (
+                  <option key={client.id} value={client.id}>
+                    {client.first_name} {client.last_name}
+                  </option>
+                ))}
+              </select>
+            </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Monto del Pago</label>
               <input
@@ -2621,7 +2666,7 @@ const CobranzasPanel = () => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Método de Pago</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">MÃ©todo de Pago</label>
               <select
                 value={paymentFormData.payment_method}
                 onChange={(e) => setPaymentFormData({...paymentFormData, payment_method: e.target.value})}
@@ -2635,7 +2680,7 @@ const CobranzasPanel = () => {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Número de Cuota</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">NÃºmero de Cuota</label>
               <input
                 type="number"
                 value={paymentFormData.installment_number}
@@ -2696,7 +2741,7 @@ const CobranzasPanel = () => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Número de Cuotas</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">NÃºmero de Cuotas</label>
               <input
                 type="number"
                 value={agreementFormData.installment_count}
@@ -2706,14 +2751,14 @@ const CobranzasPanel = () => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Monto por Cuota (calculado automáticamente)</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Monto por Cuota (calculado automÃ¡ticamente)</label>
               <input
                 type="number"
                 step="0.01"
                 value={agreementFormData.installment_amount}
                 readOnly
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-700"
-                placeholder="Se calcula automáticamente"
+                placeholder="Se calcula automÃ¡ticamente"
               />
             </div>
             <div>
@@ -2726,13 +2771,13 @@ const CobranzasPanel = () => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Fecha de Fin (calculada automáticamente)</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Fecha de Fin (calculada automÃ¡ticamente)</label>
               <input
                 type="date"
                 value={agreementFormData.end_date}
                 readOnly
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-700"
-                placeholder="Se calcula automáticamente"
+                placeholder="Se calcula automÃ¡ticamente"
               />
             </div>
             <div>
@@ -2766,27 +2811,27 @@ const CobranzasPanel = () => {
       </div>
     )}
 
-    {/* Modal de agregar gestión */}
+    {/* Modal de agregar gestiÃ³n */}
     {showManagementModal && selectedClientForManagement && (
       <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
         <div className="bg-white rounded-lg p-6 w-full max-w-md">
           <h3 className="text-lg font-semibold text-gray-900 mb-4">
-            Agregar Gestión - {selectedClientForManagement.first_name} {selectedClientForManagement.last_name}
+            Agregar GestiÃ³n - {selectedClientForManagement.first_name} {selectedClientForManagement.last_name}
           </h3>
           
           <form className="space-y-4">
-            {/* Información del cliente (readonly) */}
+            {/* InformaciÃ³n del cliente (readonly) */}
             <div className="bg-gray-50 rounded-lg p-4">
-              <h4 className="font-medium text-gray-900 mb-2">Información del Cliente</h4>
+              <h4 className="font-medium text-gray-900 mb-2">InformaciÃ³n del Cliente</h4>
               <div className="text-sm space-y-1">
                 <div><span className="font-medium">Nombre:</span> {selectedClientForManagement.first_name} {selectedClientForManagement.last_name}</div>
                 <div><span className="font-medium">Contrato:</span> {selectedClientForManagement.contract_number}</div>
               </div>
             </div>
             
-            {/* Fecha de gestión */}
+            {/* Fecha de gestiÃ³n */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Fecha de Gestión</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Fecha de GestiÃ³n</label>
               <input
                 type="date"
                 value={managementFormData.management_date}
@@ -2795,15 +2840,15 @@ const CobranzasPanel = () => {
               />
             </div>
             
-            {/* Observación */}
+            {/* ObservaciÃ³n */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Observación *</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">ObservaciÃ³n *</label>
               <textarea
                 value={managementFormData.observation}
                 onChange={(e) => setManagementFormData({...managementFormData, observation: e.target.value})}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 rows="4"
-                placeholder="Describe la gestión realizada..."
+                placeholder="Describe la gestiÃ³n realizada..."
                 required
               />
             </div>
@@ -2824,7 +2869,7 @@ const CobranzasPanel = () => {
               disabled={!managementFormData.observation || managementFormData.observation.trim() === '' || loading}
               className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
             >
-              {loading ? 'Guardando...' : 'Guardar Gestión'}
+              {loading ? 'Guardando...' : 'Guardar GestiÃ³n'}
             </button>
           </div>
         </div>
@@ -2915,7 +2960,7 @@ const CobranzasPanel = () => {
                           <div className="flex items-center gap-2">
                             <Clock className="h-5 w-5 text-blue-600" />
                             <div>
-                              <p className="text-sm font-medium text-blue-900">Última Gestión</p>
+                              <p className="text-sm font-medium text-blue-900">Ãšltima GestiÃ³n</p>
                               <p className="text-sm text-blue-700">
                                 {new Date(clientManagements[0].management_date).toLocaleDateString('es-ES', {
                                   year: 'numeric',
@@ -2939,7 +2984,7 @@ const CobranzasPanel = () => {
                                   <History className="h-4 w-4 text-purple-600" />
                                 </div>
                                 <div>
-                                  <p className="font-semibold text-gray-900">Gestión #{clientManagements.length - index}</p>
+                                  <p className="font-semibold text-gray-900">GestiÃ³n #{clientManagements.length - index}</p>
                                   <p className="text-sm text-gray-600">
                                     {new Date(management.management_date).toLocaleDateString('es-ES', {
                                       year: 'numeric',
@@ -3001,7 +3046,7 @@ const CobranzasPanel = () => {
                             </div>
                           </div>
                           <div className="mt-3 pt-3 border-t border-gray-200 grid grid-cols-2 gap-2 text-sm">
-                            <div><span className="font-medium">Método:</span> {payment.payment_method || 'N/A'}</div>
+                            <div><span className="font-medium">MÃ©todo:</span> {payment.payment_method || 'N/A'}</div>
                             <div><span className="font-medium">Recibo:</span> {payment.receipt_number || 'N/A'}</div>
                             {payment.installment_number && (
                               <div><span className="font-medium">Cuota #:</span> {payment.installment_number}</div>
@@ -3087,7 +3132,7 @@ const CobranzasPanel = () => {
       </div>
     )}
 
-    {/* Modal de historial completo de cliente (desde módulo historial) */}
+    {/* Modal de historial completo de cliente (desde mÃ³dulo historial) */}
     {showClientHistoryModal && selectedClientForHistory && (
       <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
         <div className="bg-white rounded-lg p-6 w-full max-w-4xl mx-4 max-h-[90vh] overflow-y-auto">
@@ -3198,7 +3243,7 @@ const CobranzasPanel = () => {
                         )}
                         <div>
                           <p className="font-semibold text-gray-900">
-                            {item.type === 'management' && 'Gestión'}
+                            {item.type === 'management' && 'GestiÃ³n'}
                             {item.type === 'payment' && `Pago - ${formatCurrency(item.payment_amount)}`}
                             {item.type === 'agreement' && `Convenio - ${formatCurrency(item.total_amount)}`}
                           </p>
@@ -3222,7 +3267,7 @@ const CobranzasPanel = () => {
                     )}
                     {item.type === 'payment' && (
                       <div className="mt-3 pt-3 border-t border-gray-200 text-sm">
-                        <p><span className="font-medium">Método:</span> {item.payment_method || 'N/A'}</p>
+                        <p><span className="font-medium">MÃ©todo:</span> {item.payment_method || 'N/A'}</p>
                         <p><span className="font-medium">Recibo:</span> {item.receipt_number || 'N/A'}</p>
                       </div>
                     )}
@@ -3301,20 +3346,20 @@ const CobranzasPanel = () => {
             </div>
             
             <div>
-              <label className="block text-sm font-medium text-gray-700">Método de Pago</label>
+              <label className="block text-sm font-medium text-gray-700">MÃ©todo de Pago</label>
               <p className="mt-1 text-sm text-gray-900">{selectedPayment.payment_method || 'N/A'}</p>
             </div>
             
             {selectedPayment.receipt_number && (
               <div>
-                <label className="block text-sm font-medium text-gray-700">Número de Recibo</label>
+                <label className="block text-sm font-medium text-gray-700">NÃºmero de Recibo</label>
                 <p className="mt-1 text-sm text-gray-900">{selectedPayment.receipt_number}</p>
               </div>
             )}
             
             {selectedPayment.installment_number && (
               <div>
-                <label className="block text-sm font-medium text-gray-700">Cuota Número</label>
+                <label className="block text-sm font-medium text-gray-700">Cuota NÃºmero</label>
                 <p className="mt-1 text-sm text-gray-900">#{selectedPayment.installment_number}</p>
               </div>
             )}
@@ -3342,7 +3387,7 @@ const CobranzasPanel = () => {
       </div>
     )}
 
-    {/* Modal de confirmación de eliminación de pago */}
+    {/* Modal de confirmaciÃ³n de eliminaciÃ³n de pago */}
     {showDeletePaymentModal && selectedPayment && (
       <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
         <div className="bg-white rounded-lg p-6 w-full max-w-md">
@@ -3363,7 +3408,7 @@ const CobranzasPanel = () => {
           
           <div className="space-y-4">
             <p className="text-sm text-gray-700">
-              ¿Estás seguro de que deseas eliminar este pago?
+              Â¿EstÃ¡s seguro de que deseas eliminar este pago?
             </p>
             
             <div className="bg-gray-50 p-4 rounded-lg">
@@ -3374,7 +3419,7 @@ const CobranzasPanel = () => {
             
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Contraseña de confirmación
+                ContraseÃ±a de confirmaciÃ³n
               </label>
               <input
                 type="password"
@@ -3386,7 +3431,7 @@ const CobranzasPanel = () => {
                 className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
                   deletePasswordError ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-blue-500'
                 }`}
-                placeholder="Ingresa la contraseña"
+                placeholder="Ingresa la contraseÃ±a"
               />
               {deletePasswordError && (
                 <p className="mt-1 text-sm text-red-600">{deletePasswordError}</p>
@@ -3457,7 +3502,7 @@ const CobranzasPanel = () => {
             </div>
             
             <div>
-              <label className="block text-sm font-medium text-gray-700">Número de Cuotas</label>
+              <label className="block text-sm font-medium text-gray-700">NÃºmero de Cuotas</label>
               <p className="mt-1 text-sm text-gray-900">{selectedAgreement.installment_count}</p>
             </div>
             
@@ -3525,7 +3570,7 @@ const CobranzasPanel = () => {
       </div>
     )}
 
-    {/* Modal de confirmación de eliminación de convenio */}
+    {/* Modal de confirmaciÃ³n de eliminaciÃ³n de convenio */}
     {showDeleteAgreementModal && selectedAgreement && (
       <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
         <div className="bg-white rounded-lg p-6 w-full max-w-md">
@@ -3546,7 +3591,7 @@ const CobranzasPanel = () => {
           
           <div className="space-y-4">
             <p className="text-sm text-gray-700">
-              ¿Estás seguro de que deseas eliminar este convenio?
+              Â¿EstÃ¡s seguro de que deseas eliminar este convenio?
             </p>
             
             <div className="bg-gray-50 p-4 rounded-lg">
@@ -3558,7 +3603,7 @@ const CobranzasPanel = () => {
             
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Contraseña de confirmación
+                ContraseÃ±a de confirmaciÃ³n
               </label>
               <input
                 type="password"
@@ -3570,7 +3615,7 @@ const CobranzasPanel = () => {
                 className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
                   deleteAgreementPasswordError ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-blue-500'
                 }`}
-                placeholder="Ingresa la contraseña"
+                placeholder="Ingresa la contraseÃ±a"
               />
               {deleteAgreementPasswordError && (
                 <p className="mt-1 text-sm text-red-600">{deleteAgreementPasswordError}</p>
@@ -3602,7 +3647,7 @@ const CobranzasPanel = () => {
       </div>
     )}
 
-    {/* Modal de confirmación de eliminación de todos los convenios */}
+    {/* Modal de confirmaciÃ³n de eliminaciÃ³n de todos los convenios */}
     {showDeleteAllAgreementsModal && (
       <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
         <div className="bg-white rounded-lg p-6 w-full max-w-md">
@@ -3622,7 +3667,7 @@ const CobranzasPanel = () => {
           
           <div className="space-y-4">
             <p className="text-sm text-gray-700">
-              ⚠️ <strong>ADVERTENCIA:</strong> Esta acción eliminará TODOS los convenios de pago. Esta acción no se puede deshacer.
+              âš ï¸ <strong>ADVERTENCIA:</strong> Esta acciÃ³n eliminarÃ¡ TODOS los convenios de pago. Esta acciÃ³n no se puede deshacer.
             </p>
             
             <div className="bg-red-50 border border-red-200 p-4 rounded-lg">
@@ -3630,13 +3675,13 @@ const CobranzasPanel = () => {
                 Total de convenios a eliminar: {paymentAgreements.length}
               </p>
               <p className="text-xs text-red-700 mt-1">
-                Si hay pagos asociados a algún convenio, la operación fallará. Debes eliminar los pagos primero.
+                Si hay pagos asociados a algÃºn convenio, la operaciÃ³n fallarÃ¡. Debes eliminar los pagos primero.
               </p>
             </div>
             
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Contraseña de confirmación
+                ContraseÃ±a de confirmaciÃ³n
               </label>
               <input
                 type="password"
@@ -3648,7 +3693,7 @@ const CobranzasPanel = () => {
                 className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
                   deleteAllAgreementsPasswordError ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-blue-500'
                 }`}
-                placeholder="Ingresa la contraseña"
+                placeholder="Ingresa la contraseÃ±a"
               />
               {deleteAllAgreementsPasswordError && (
                 <p className="mt-1 text-sm text-red-600">{deleteAllAgreementsPasswordError}</p>
@@ -3683,3 +3728,4 @@ const CobranzasPanel = () => {
 }
 
 export default CobranzasPanel
+

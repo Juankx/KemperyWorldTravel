@@ -1,10 +1,10 @@
 [
   {
     "id": "9f907e27-dd72-4dbb-bc6a-f1eac7bfa0a3",
-    "email": "Admin",
+    "email": "admin",
     "password_hash": "Kempery2025+",
     "first_name": "Admin",
-    "last_name": "Kempery",
+    "last_name": "User",
     "role": "admin",
     "is_active": true,
     "created_at": "2025-09-22T16:52:21.447Z",
@@ -12,10 +12,10 @@
   },
   {
     "id": "6e1f6971-27bb-44a1-b62d-bc9661fb6800",
-    "email": "Cristhian",
+    "email": "paola",
     "password_hash": "Kempery2025+",
-    "first_name": "Cristhian",
-    "last_name": "Empleado",
+    "first_name": "Paola",
+    "last_name": "Usuario",
     "role": "employee",
     "is_active": true,
     "created_at": "2025-10-01T13:42:11.389Z",
@@ -23,11 +23,11 @@
   },
   {
     "id": "adbffb29-a371-4394-8864-e917ae1d89a8",
-    "email": "Cobranzas",
+    "email": "cobranzas",
     "password_hash": "Kempery2025+",
     "first_name": "Cobranzas",
-    "last_name": "Usuario",
-    "role": "employee",
+    "last_name": "User",
+    "role": "cobranza",
     "is_active": true,
     "created_at": "2025-10-01T14:23:17.799Z",
     "updated_at": "2025-10-01T14:38:07.933Z"
