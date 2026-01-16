@@ -1272,6 +1272,31 @@ app.get('/api/payment-agreements', (req, res) => {
   }
 });
 
+// GET convenios por cliente
+app.get('/api/payment-agreements/client/:clientId', (req, res) => {
+  const token = req.headers.authorization?.replace('Bearer ', '');
+  if (!token) {
+    return res.status(401).json({ error: 'No token' });
+  }
+  
+  try {
+    jwt.verify(token, JWT_SECRET);
+    
+    const { clientId } = req.params;
+    const clientAgreements = paymentAgreements.filter(
+      (a) => a.client_id === parseInt(clientId)
+    );
+    
+    res.json({
+      ok: true,
+      data: clientAgreements,
+      agreements: clientAgreements
+    });
+  } catch (err) {
+    res.status(401).json({ error: 'Token inválido' });
+  }
+});
+
 app.post('/api/payment-agreements', (req, res) => {
   const token = req.headers.authorization?.replace('Bearer ', '');
   if (!token) {
