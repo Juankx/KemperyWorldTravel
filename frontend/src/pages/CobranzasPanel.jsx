@@ -484,6 +484,7 @@ const CobranzasPanel = () => {
     setSelectedClientForPayment(client)
     setPaymentFormData({
       client_id: client.id,
+      client_name: `${client.first_name} ${client.last_name}`,
       contract_number: client.contract_number,
       payment_amount: '',
       payment_date: new Date().toISOString().split('T')[0],
@@ -593,6 +594,7 @@ const CobranzasPanel = () => {
       setSelectedClientForPayment(null)
       setPaymentFormData({
         client_id: '',
+        client_name: '',
         contract_number: '',
         payment_amount: '',
         payment_date: new Date().toISOString().split('T')[0],
