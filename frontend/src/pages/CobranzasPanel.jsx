@@ -358,7 +358,7 @@ const CobranzasPanel = () => {
         setClientPaymentAgreement(null)
       }
     } catch (error) {
-      console.error('Error loading payment agreement:', error)
+      // Silenciosamente ignorar error de agreement (endpoint puede no existir en mock)
       setClientPaymentAgreement(null)
     }
   }
