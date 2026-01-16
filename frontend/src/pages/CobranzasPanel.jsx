@@ -594,9 +594,9 @@ const CobranzasPanel = () => {
       await paymentService.createPayment(paymentData)
       alert('Pago registrado exitosamente')
       
-      if (selectedClient) {
-        await loadClientPayments(selectedClient.id)
-        await loadClientPaymentAgreement(selectedClient.id)
+      if (selectedClientForPayment) {
+        await loadClientPayments(selectedClientForPayment.id)
+        await loadClientPaymentAgreement(selectedClientForPayment.id)
         await loadClients()
       }
       
