@@ -553,7 +553,7 @@ const CobranzasPanel = () => {
       })
       // Recargar clientes si estamos en la vista de clientes
       if (activeModule === 'clientes') {
-        await loadClients(currentPage, searchTerm)
+        await loadClients()
       }
     } catch (error) {
       console.error('Error saving management:', error)
@@ -583,12 +583,10 @@ const CobranzasPanel = () => {
       await paymentService.createPayment(paymentData)
       alert('Pago registrado exitosamente')
       
-      // Recargar datos del cliente si el modal de detalles estÃ¡ abierto
       if (selectedClient) {
         await loadClientPayments(selectedClient.id)
         await loadClientPaymentAgreement(selectedClient.id)
-        // Recargar lista de clientes para actualizar montos pendientes
-        await loadClients(currentPage, searchTerm)
+        await loadClients()
       }
       
       setShowPaymentModal(false)
@@ -762,8 +760,7 @@ const CobranzasPanel = () => {
       if (selectedClient) {
         await loadClientAgreements(selectedClient.id)
         await loadClientPaymentAgreement(selectedClient.id)
-        // Recargar lista de clientes para actualizar montos pendientes
-        await loadClients(currentPage, searchTerm)
+        await loadClients()
       }
       
       // Recargar lista de convenios si estamos en el mÃ³dulo de convenios
@@ -1977,7 +1974,13 @@ const CobranzasPanel = () => {
             <Trash2 size={16} className="inline mr-2" />
             Eliminar Todos
           </button>
-          <button className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">
+          <button 
+            onClick={() => {
+              setActiveModule('clients')
+              alert('Por favor selecciona un cliente de la lista y usa la opcion "Agregar Convenio" desde el menu de acciones')
+            }}
+            className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+          >
             <Plus size={16} className="inline mr-2" />
             Nuevo Convenio
           </button>
@@ -2394,7 +2397,7 @@ const CobranzasPanel = () => {
             className="w-full flex items-center px-3 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900 rounded-md"
           >
             <LogOut size={20} className="mr-3" />
-            Cerrar SesiÃ³n
+            Cerrar Sesión
           </button>
         </div>
       </div>
