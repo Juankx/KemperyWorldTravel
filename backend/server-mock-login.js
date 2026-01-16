@@ -491,7 +491,7 @@ app.post('/api/payments', (req, res) => {
       });
     }
 
-    // Crear nuevo pago (asegurar tipos correctos)
+    // Crear nuevo pago (asegurar tipos correctos Y nombres de campo NORMALIZADOS)
     const parsedClientId = parseInt(client_id);
     const parsedAmount = parseFloat(amount);
     
@@ -499,9 +499,9 @@ app.post('/api/payments', (req, res) => {
       id: nextPaymentId++,
       client_id: parsedClientId,
       client_name,
-      payment_amount: parsedAmount,
-      payment_date: date,
-      payment_method: method,
+      amount: parsedAmount,              // 📌 NORMALIZADO: payment_amount → amount
+      date: date,                        // 📌 NORMALIZADO: payment_date → date
+      method: method,                    // 📌 NORMALIZADO: payment_method → method
       installment_number: installment_number ? parseInt(installment_number) : null,
       reference: reference || `PAG${String(nextPaymentId).padStart(3, '0')}`,
       notes: notes || '',
