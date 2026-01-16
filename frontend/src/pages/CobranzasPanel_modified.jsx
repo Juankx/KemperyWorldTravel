@@ -19,7 +19,6 @@ import {
   Trash2
 } from 'lucide-react'
 import { clientService, paymentService, paymentAgreementService, clientManagementService, clientCollectionsCommentsService } from '../services/api'
-import AddClientModal from '../components/AddClientModal'
 import reportService from '../services/reportService'
 import SessionWarning from '../components/SessionWarning'
 
@@ -40,8 +39,16 @@ const CobranzasPanel = () => {
   
   // Estados para modales
   const [showClientDetails, setShowClientDetails] = useState(false)
-  const [showAddClientModal, setShowAddClientModal] = useState(false)
   const [showPaymentModal, setShowPaymentModal] = useState(false)
+  const [showAddClientModal, setShowAddClientModal] = useState(false)
+  const [newClientFormData, setNewClientFormData] = useState({
+    first_name: '',
+    last_name: '',
+    email: '',
+    phone: '',
+    contract_number: '',
+    status: 'activo'
+  })
   const [showAgreementModal, setShowAgreementModal] = useState(false)
   const [showManagementModal, setShowManagementModal] = useState(false)
   const [showManagementHistoryModal, setShowManagementHistoryModal] = useState(false)
@@ -1623,13 +1630,6 @@ const CobranzasPanel = () => {
             >
               <Search size={16} />
             </button>
-            <button
-              onClick={() => setShowAddClientModal(true)}
-              className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 flex items-center gap-2"
-            >
-              <Plus size={16} />
-              Nuevo Cliente
-            </button>
           </div>
         </div>
       </div>
@@ -2271,47 +2271,6 @@ const CobranzasPanel = () => {
     }
   }
 
-
-  // Función para agregar nuevo cliente
-  const handleAddClient = async () => {
-    if (!newClientFormData.first_name || !newClientFormData.last_name || !newClientFormData.email || !newClientFormData.contract_number) {
-      alert('Por favor, completa todos los campos requeridos')
-      return
-    }
-
-    try {
-      setLoading(true)
-      const response = await clientService.createClient({
-        first_name: newClientFormData.first_name,
-        last_name: newClientFormData.last_name,
-        email: newClientFormData.email,
-        phone: newClientFormData.phone || '',
-        contract_number: newClientFormData.contract_number,
-        status: newClientFormData.status || 'activo'
-      })
-
-      console.log('Cliente creado:', response.data)
-      alert('✅ Cliente creado exitosamente')
-      setShowAddClientModal(false)
-      setNewClientFormData({
-        first_name: '',
-        last_name: '',
-        email: '',
-        phone: '',
-        contract_number: '',
-        status: 'activo'
-      })
-      
-      // Recargar la lista de clientes
-      setCurrentPage(1)
-      await loadClients()
-    } catch (err) {
-      console.error('Error al crear cliente:', err)
-      alert('Error: ' + (err.response?.data?.error || err.message))
-    } finally {
-      setLoading(false)
-    }
-  }
   return (
     <div className="min-h-screen bg-gray-100">
       <SessionWarning />
@@ -3778,5 +3737,4 @@ const CobranzasPanel = () => {
 }
 
 export default CobranzasPanel
-
 
