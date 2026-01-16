@@ -461,6 +461,10 @@ app.get('/api/payments', (req, res) => {
 // Registrar nuevo pago
 app.post('/api/payments', (req, res) => {
   const token = req.headers.authorization?.replace('Bearer ', '');
+  
+  console.log('ðŸ“¨ SOLICITUD DE PAGO RECIBIDA');
+  console.log('BODY RECIBIDO:', req.body);
+  console.log('HEADERS:', req.headers);
 
   if (!token) {
     return res.status(401).json({ error: 'No token' });
@@ -519,7 +523,7 @@ app.post('/api/payments', (req, res) => {
   }
 });
 
-// Obtener pagos de un cliente específico
+// Obtener pagos de un cliente especï¿½fico
 app.get('/api/payments/client/:clientId', (req, res) => {
   const token = req.headers.authorization?.replace('Bearer ', '');
   
@@ -540,7 +544,7 @@ app.get('/api/payments/client/:clientId', (req, res) => {
     });
   } catch (err) {
     res.status(401).json({
-      error: 'Token inválido',
+      error: 'Token invï¿½lido',
       message: err.message
     });
   }

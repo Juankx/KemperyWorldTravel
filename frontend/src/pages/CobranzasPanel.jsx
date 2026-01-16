@@ -578,8 +578,10 @@ const CobranzasPanel = () => {
         ...paymentFormData,
         payment_amount: parseFloat(paymentFormData.payment_amount),
         installment_number: paymentFormData.installment_number ? parseInt(paymentFormData.installment_number) : null,
-        booking_id: null // Los pagos de cobranzas pueden no tener booking_id
+        booking_id: null
       }
+      
+      console.log('📤 DATOS QUE ENVIA EL FRONTEND:', paymentData)
       
       await paymentService.createPayment(paymentData)
       alert('Pago registrado exitosamente')
