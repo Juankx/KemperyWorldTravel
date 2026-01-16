@@ -491,12 +491,15 @@ app.post('/api/payments', (req, res) => {
       });
     }
 
-    // Crear nuevo pago
+    // Crear nuevo pago (asegurar tipos correctos)
+    const parsedClientId = parseInt(client_id);
+    const parsedAmount = parseFloat(amount);
+    
     const newPayment = {
       id: nextPaymentId++,
-      client_id: parseInt(client_id),
+      client_id: parsedClientId,
       client_name,
-      payment_amount: parseFloat(amount),
+      payment_amount: parsedAmount,
       payment_date: date,
       payment_method: method,
       installment_number: installment_number ? parseInt(installment_number) : null,
@@ -508,7 +511,13 @@ app.post('/api/payments', (req, res) => {
 
     payments.push(newPayment);
 
-    console.log('✅ Pago registrado:', newPayment);
+    console.log('✅ PAGO REGISTRADO CORRECTAMENTE');
+    console.log('   ID:', newPayment.id);
+    console.log('   CLIENT_ID (tipo:' + typeof(parsedClientId) + '):', parsedClientId);
+    console.log('   CLIENT_NAME:', newPayment.client_name);
+    console.log('   AMOUNT:', newPayment.payment_amount);
+    console.log('📊 TOTAL DE PAGOS EN MEMORIA AHORA:', payments.length);
+    console.log('📋 ARRAY COMPLETO DE PAGOS:', JSON.stringify(payments, null, 2));
 
     res.status(201).json({
       ok: true,
@@ -535,7 +544,27 @@ app.get('/api/payments/client/:clientId', (req, res) => {
     jwt.verify(token, JWT_SECRET);
     
     const clientId = parseInt(req.params.clientId);
+    
+    console.log('\n🔍 ===== SOLICITUD GET PAGOS POR CLIENTE =====');
+    console.log('📌 CLIENT_ID BUSCADO (tipo:' + typeof(clientId) + '):', clientId);
+    console.log('📊 TOTAL PAGOS EN MEMORIA:', payments.length);
+    
+    if (payments.length === 0) {
+      console.log('⚠️  NO HAY PAGOS EN MEMORIA');
+    } else {
+      console.log('📋 TODOS LOS PAGOS EN MEMORIA:');
+      payments.forEach((p, idx) => {
+        console.log(`   [${idx}] ID: ${p.id} | CLIENT_ID (tipo:${typeof(p.client_id)}): ${p.client_id} | NAME: ${p.client_name}`);
+      });
+    }
+    
     const clientPayments = payments.filter(p => p.client_id === clientId);
+    
+    console.log(`✅ RESULTADO: ${clientPayments.length} PAGOS ENCONTRADOS`);
+    if (clientPayments.length > 0) {
+      console.log('📃 PAGOS FILTRADOS:', JSON.stringify(clientPayments, null, 2));
+    }
+    console.log('================================================\n');
     
     res.json({
       ok: true,

@@ -388,11 +388,14 @@ const CobranzasPanel = () => {
   // Cargar pagos del cliente
   const loadClientPayments = async (clientId) => {
     try {
-      const response = await paymentService.getPaymentsByClient(clientId)
-      setClientPayments(response.payments || [])
+      console.log('🔄 CARGANDO PAGOS PARA CLIENTE:', clientId);
+      const response = await paymentService.getPaymentsByClient(clientId);
+      console.log('📨 RESPUESTA DEL BACKEND:', JSON.stringify(response, null, 2));
+      console.log('🎯 PAGOS RECIBIDOS:', response.payments);
+      setClientPayments(response.payments || []);
     } catch (error) {
-      console.error('Error loading client payments:', error)
-      setClientPayments([])
+      console.error('Error loading client payments:', error);
+      setClientPayments([]);
     }
   }
   
@@ -582,6 +585,10 @@ const CobranzasPanel = () => {
       }
       
       console.log('📤 DATOS QUE ENVIA EL FRONTEND:', paymentData)
+      console.log('   - client_id (tipo:' + typeof(paymentData.client_id) + '):', paymentData.client_id)
+      console.log('   - client_name:', paymentData.client_name)
+      console.log('   - amount:', paymentData.payment_amount)
+      console.log('   - method:', paymentData.payment_method)
       
       await paymentService.createPayment(paymentData)
       alert('Pago registrado exitosamente')
