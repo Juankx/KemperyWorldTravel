@@ -594,21 +594,14 @@ const CobranzasPanel = () => {
       await paymentService.createPayment(paymentData)
       alert('Pago registrado exitosamente')
       
-      console.log('📌 selectedClientForPayment:', selectedClientForPayment)
-      console.log('📌 paymentFormData.client_id:', paymentFormData.client_id)
+      // Usar siempre client_id del formulario que SABEMOS está correcto
+      const clientIdToLoad = parseInt(paymentFormData.client_id)
       
-      if (selectedClientForPayment) {
-        console.log('✅ CARGANDO PAGOS DEL CLIENTE:', selectedClientForPayment.id)
-        await loadClientPayments(selectedClientForPayment.id)
-        await loadClientPaymentAgreement(selectedClientForPayment.id)
+      if (clientIdToLoad) {
+        console.log('✅ CARGANDO PAGOS PARA CLIENTE:', clientIdToLoad)
+        await loadClientPayments(clientIdToLoad)
+        await loadClientPaymentAgreement(clientIdToLoad)
         await loadClients()
-      } else {
-        console.log('❌ selectedClientForPayment ES NULL - INTENTANDO CARGAR CON client_id DE FORM')
-        if (paymentFormData.client_id) {
-          await loadClientPayments(paymentFormData.client_id)
-          await loadClientPaymentAgreement(paymentFormData.client_id)
-          await loadClients()
-        }
       }
       
       setShowPaymentModal(false)
