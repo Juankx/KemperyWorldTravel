@@ -2580,10 +2580,10 @@ const CobranzasPanel = () => {
                     <div className="flex justify-between items-start">
                       <div>
                         <p className="text-sm font-medium text-gray-900">
-                          {formatCurrency(payment.payment_amount || payment.amount || 0)}
+                          {formatCurrency(payment.amount || payment.payment_amount || 0)}
                         </p>
                         <p className="text-xs text-gray-600">
-                          {payment.payment_method || 'N/A'} - {new Date(payment.payment_date || payment.created_at).toLocaleDateString('es-ES')}
+                          {payment.method || payment.payment_method || 'N/A'} - {new Date(payment.date || payment.payment_date || payment.created_at).toLocaleDateString('es-ES')}
                         </p>
                         {payment.installment_number && (
                           <p className="text-xs text-gray-500">Cuota #{payment.installment_number}</p>
