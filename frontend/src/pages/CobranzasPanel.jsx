@@ -579,6 +579,7 @@ const CobranzasPanel = () => {
       setLoading(true)
       const paymentData = {
         ...paymentFormData,
+        client_id: parseInt(paymentFormData.client_id),
         payment_amount: parseFloat(paymentFormData.payment_amount),
         installment_number: paymentFormData.installment_number ? parseInt(paymentFormData.installment_number) : null,
         booking_id: null
