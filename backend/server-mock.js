@@ -36,8 +36,8 @@ const mockUsers = {
 };
 
 const mockClients = [
-  { id: '1', first_name: 'Juan', last_name: 'Pérez', email: 'juan@example.com', phone: '123456789', contract_number: 'CON-001' },
-  { id: '2', first_name: 'María', last_name: 'García', email: 'maria@example.com', phone: '987654321', contract_number: 'CON-002' }
+  { id: '1', first_name: 'Juan', last_name: 'Pï¿½rez', email: 'juan@example.com', phone: '123456789', contract_number: 'CON-001' },
+  { id: '2', first_name: 'Marï¿½a', last_name: 'Garcï¿½a', email: 'maria@example.com', phone: '987654321', contract_number: 'CON-002' }
 ];
 
 const mockPayments = [];
@@ -86,6 +86,33 @@ app.post('/api/auth/login', (req, res) => {
     });
   } else {
     res.status(401).json({ error: 'Invalid credentials' });
+  }
+});
+
+app.get('/api/auth/verify', (req, res) => {
+  // Get token from header
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+  
+  if (!token) {
+    return res.status(401).json({ valid: false, error: 'No token provided' });
+  }
+  
+  // Mock token validation (starts with 'mock-jwt-token-')
+  if (token.startsWith('mock-jwt-token-')) {
+    // Return a mock user based on stored user info
+    res.json({
+      valid: true,
+      user: {
+        id: '1',
+        email: 'cobranzas@kempery.com',
+        first_name: 'Cobranzas',
+        last_name: 'User',
+        role: 'cobranza'
+      }
+    });
+  } else {
+    res.status(401).json({ valid: false, error: 'Invalid token' });
   }
 });
 
