@@ -3,7 +3,7 @@ import { MessageCircle } from 'lucide-react'
 
 const WhatsAppFloat = () => {
   const openWhatsApp = () => {
-    window.open('https://wa.me/593999222210?text=¡Hola! Me gustaría obtener información sobre sus paquetes turísticos.', '_blank')
+    window.open('https://wa.me/0984707978?text=¡Hola! Me gustaría obtener información sobre los paquetes turísticos de Innovation Business.', '_blank')
   }
 
   return (
