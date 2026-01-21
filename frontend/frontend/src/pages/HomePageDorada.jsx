@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import { ChevronLeft, ChevronRight, MapPin, DollarSign, Star } from 'lucide-react'
 import Navbar from '../components/Navbar'
-import Footer from '../components/Footer'
 import TestimonialsPremium from '../components/TestimonialsPremium'
+import Footer from '../components/Footer'
 
 const HomePageDorada = () => {
   const [currentSlide, setCurrentSlide] = useState(0)
@@ -284,18 +284,8 @@ const HomePageDorada = () => {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-amber-900 text-white py-8 px-6">
-        <div className="max-w-7xl mx-auto text-center">
-          <h3 className="text-2xl font-bold mb-2">Innovation Business</h3>
-          <p className="text-amber-200 mb-4">Tu plataforma de viajes confiable</p>
-          <div className="border-t border-amber-700 pt-6 mt-6">
-            <p className="text-amber-300">
-              © 2024 Innovation Business. Todos los derechos reservados.
-            </p>
-          </div>
-        </div>
-      </footer>
+      {/* Footer Component */}
+      <Footer />
     </div>
   )
 }
