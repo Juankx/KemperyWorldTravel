@@ -14,6 +14,7 @@ import PaquetesPage from './pages/PaquetesPage'
 import ExperienciasPage from './pages/ExperienciasPage'
 import ContactanosPage from './pages/ContactanosPage'
 import LoginPage from './pages/LoginPage'
+import HomePageDorada from './pages/HomePageDorada'
 import RoleBasedRedirect from './components/RoleBasedRedirect'
 
 function App() {
@@ -22,17 +23,7 @@ function App() {
       <AuthProvider>
         <div className="min-h-screen bg-gray-50">
           <Routes>
-            <Route path="/" element={
-              <>
-                <Navbar />
-                <Hero />
-                <FeaturedPackages />
-                <StatsSection />
-                <TestimonialsSection />
-                <Footer />
-                <WhatsAppFloat />
-              </>
-            } />
+            <Route path="/" element={<HomePageDorada />} />
             <Route path="/nosotros" element={
               <>
                 <Navbar />

@@ -57,7 +57,7 @@ app.use(express.json());
 // Root endpoint
 app.get('/', (req, res) => {
   res.json({
-    message: 'Kempery Backend Mock Server',
+    message: 'Innovation Business Backend Mock Server',
     version: '1.0.0',
     mode: 'DEVELOPMENT (Mock Data)',
     endpoints: {
@@ -168,7 +168,7 @@ app.get('/api/reports/dashboard', (req, res) => {
 // Start Server
 app.listen(PORT, '0.0.0.0', () => {
   console.log('');
-  console.log('Backend Mock Server running on http://localhost:' + PORT);
+  console.log('🌟 Innovation Business Backend Mock Server running on http://localhost:' + PORT);
   console.log('CORS enabled for: http://localhost:3000');
   console.log('Mode: DEVELOPMENT (Mock Data - No Database)');
   console.log('');

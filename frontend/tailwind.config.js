@@ -10,6 +10,11 @@ export default {
         'navy': '#1e3a8a',
         'light-blue': '#3b82f6',
         'accent': '#60a5fa',
+        // Paleta de colores dorados
+        'gold': '#fbbf24',
+        'gold-dark': '#d97706',
+        'gold-light': '#fcd34d',
+        'amber-gold': '#92400e',
       },
       fontFamily: {
         'sans': ['Inter', 'system-ui', 'sans-serif'],
