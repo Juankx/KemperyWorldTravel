@@ -65,8 +65,20 @@ const HomePageDorada = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-amber-50 to-white">
-      {/* Hero Section */}
+      {/* Hero Section con Video de Fondo */}
       <section className="relative h-screen bg-gradient-to-r from-amber-900 via-amber-800 to-yellow-700 flex items-center justify-center overflow-hidden">
+        {/* Video de Fondo */}
+        <video
+          autoPlay
+          muted
+          loop
+          className="absolute inset-0 w-full h-full object-cover opacity-30"
+        >
+          <source
+            src="https://videos.pexels.com/video-files/3045163/3045163-sd_640_360_25fps.mp4"
+            type="video/mp4"
+          />
+        </video>
         {/* Fondo decorativo */}
         <div className="absolute inset-0 opacity-10">
           <div className="absolute top-20 left-20 w-72 h-72 bg-yellow-300 rounded-full mix-blend-multiply filter blur-3xl"></div>

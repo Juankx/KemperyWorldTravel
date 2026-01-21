@@ -15,6 +15,7 @@ import ExperienciasPage from './pages/ExperienciasPage'
 import ContactanosPage from './pages/ContactanosPage'
 import LoginPage from './pages/LoginPage'
 import HomePageDorada from './pages/HomePageDorada'
+import Reviews from './pages/Reviews'
 import RoleBasedRedirect from './components/RoleBasedRedirect'
 
 function App() {
@@ -24,6 +25,14 @@ function App() {
         <div className="min-h-screen bg-gray-50">
           <Routes>
             <Route path="/" element={<HomePageDorada />} />
+            <Route path="/resenias" element={
+              <>
+                <Navbar />
+                <Reviews />
+                <Footer />
+                <WhatsAppFloat />
+              </>
+            } />
             <Route path="/nosotros" element={
               <>
                 <Navbar />

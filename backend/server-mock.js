@@ -7,41 +7,96 @@ require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Mock Data
+// Mock Data - Users (Innovation Business)
 const mockUsers = {
-  'admin': {
+  'demo@innovation.com': {
     id: '1',
-    email: 'admin',
-    password: 'Kempery2025+',
-    first_name: 'Admin',
-    last_name: 'User',
-    role: 'admin'
+    email: 'demo@innovation.com',
+    password: 'demo123',
+    name: 'Demo User',
+    role: 'customer',
+    createdAt: new Date().toISOString()
   },
-  'paola': {
+  'admin@innovation.com': {
     id: '2',
-    email: 'paola',
-    password: 'Kempery2025+',
-    first_name: 'Paola',
-    last_name: 'Usuario',
-    role: 'employee'
+    email: 'admin@innovation.com',
+    password: 'admin123',
+    name: 'Admin User',
+    role: 'admin',
+    createdAt: new Date().toISOString()
   },
-  'cobranzas': {
+  'customer@innovation.com': {
     id: '3',
-    email: 'cobranzas',
-    password: 'Kempery2025+',
-    first_name: 'Cobranzas',
-    last_name: 'User',
-    role: 'cobranza'
+    email: 'customer@innovation.com',
+    password: 'customer123',
+    name: 'Customer User',
+    role: 'customer',
+    createdAt: new Date().toISOString()
   }
 };
 
-const mockClients = [
-  { id: '1', first_name: 'Juan', last_name: 'P�rez', email: 'juan@example.com', phone: '123456789', contract_number: 'CON-001' },
-  { id: '2', first_name: 'Mar�a', last_name: 'Garc�a', email: 'maria@example.com', phone: '987654321', contract_number: 'CON-002' }
+// Mock Packages
+const mockPackages = [
+  {
+    id: '1',
+    city: 'Cartagena',
+    country: 'Colombia',
+    price: 800,
+    description: 'Explora la magia de la ciudad amurallada',
+    rating: 4.8,
+    days: 5,
+    image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&h=500&fit=crop'
+  },
+  {
+    id: '2',
+    city: 'Galápagos',
+    country: 'Ecuador',
+    price: 800,
+    description: 'Descubre la vida silvestre única del planeta',
+    rating: 4.9,
+    days: 7,
+    image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=500&fit=crop'
+  },
+  {
+    id: '3',
+    city: 'Punta Cana',
+    country: 'República Dominicana',
+    price: 800,
+    description: 'Relájate en playas paradisíacas',
+    rating: 4.7,
+    days: 6,
+    image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&h=500&fit=crop'
+  }
 ];
 
-const mockPayments = [];
-const mockAgreements = [];
+// Mock Bookings
+const mockBookings = [];
+
+// Mock Reviews
+const mockReviews = [
+  {
+    id: '1',
+    userId: '1',
+    packageId: '1',
+    rating: 5,
+    text: 'Experiencia extraordinaria. Innovation Business superó todas mis expectativas.',
+    name: 'María González',
+    destination: 'Cartagena, Colombia',
+    verified: true,
+    createdAt: new Date().toISOString()
+  },
+  {
+    id: '2',
+    userId: '2',
+    packageId: '2',
+    rating: 5,
+    text: 'Increíble. La organización fue perfecta, guías profesionales y la naturaleza nos dejó sin palabras.',
+    name: 'Juan Carlos Rodríguez',
+    destination: 'Galápagos, Ecuador',
+    verified: true,
+    createdAt: new Date().toISOString()
+  }
+];
 
 // Middleware
 // app.use(helmet()); // Desactivado para desarrollo
@@ -125,56 +180,160 @@ app.get('/api/clients', (req, res) => {
   res.json({ data: mockClients, total: mockClients.length, totalPages: 1 });
 });
 
-app.post('/api/clients', (req, res) => {
-  const newClient = { id: String(mockClients.length + 1), ...req.body, created_at: new Date() };
-  mockClients.push(newClient);
-  res.status(201).json(newClient);
-});
+// NEW: AUTH ENDPOINTS (Innovation Business)
+app.post('/api/auth/login', (req, res) => {
+  const { email, password } = req.body;
+  const user = mockUsers[email];
+  
+  if (!user || user.password !== password) {
+    return res.status(401).json({ error: 'Email o contraseña incorrectos' });
+  }
 
-// Payments
-app.get('/api/payments', (req, res) => {
-  res.json({ data: mockPayments, total: mockPayments.length, totalPages: 1 });
-});
-
-app.post('/api/payments', (req, res) => {
-  const newPayment = { id: String(mockPayments.length + 1), ...req.body, created_at: new Date() };
-  mockPayments.push(newPayment);
-  res.status(201).json(newPayment);
-});
-
-// Payment Agreements
-app.get('/api/payment-agreements', (req, res) => {
-  res.json({ data: mockAgreements, total: mockAgreements.length, totalPages: 1 });
-});
-
-app.post('/api/payment-agreements', (req, res) => {
-  const newAgreement = { id: String(mockAgreements.length + 1), ...req.body, created_at: new Date() };
-  mockAgreements.push(newAgreement);
-  res.status(201).json(newAgreement);
-});
-
-// Reports
-app.get('/api/reports/dashboard', (req, res) => {
+  const { password: _, ...userWithoutPassword } = user;
   res.json({
-    totalClients: mockClients.length,
-    unpaidClients: 2,
-    totalDebt: 15000,
-    collectedAmount: 5000,
-    pendingAmount: 10000,
-    collectionRate: 33.33
+    user: userWithoutPassword,
+    token: 'mock-token-' + Date.now(),
+    expiresIn: 86400
   });
+});
+
+app.post('/api/auth/register', (req, res) => {
+  const { email, password, name } = req.body;
+  
+  if (mockUsers[email]) {
+    return res.status(400).json({ error: 'El email ya está registrado' });
+  }
+
+  const newUser = {
+    id: String(Object.keys(mockUsers).length + 1),
+    email,
+    password,
+    name,
+    role: 'customer',
+    createdAt: new Date().toISOString()
+  };
+
+  mockUsers[email] = newUser;
+  const { password: _, ...userWithoutPassword } = newUser;
+  
+  res.status(201).json({
+    user: userWithoutPassword,
+    token: 'mock-token-' + Date.now(),
+    expiresIn: 86400
+  });
+});
+
+// NEW: PACKAGES ENDPOINTS (Innovation Business)
+app.get('/api/packages', (req, res) => {
+  res.json({
+    data: mockPackages,
+    total: mockPackages.length,
+    totalPages: 1
+  });
+});
+
+app.get('/api/packages/:id', (req, res) => {
+  const pkg = mockPackages.find(p => p.id === req.params.id);
+  if (!pkg) {
+    return res.status(404).json({ error: 'Paquete no encontrado' });
+  }
+  res.json(pkg);
+});
+
+// NEW: BOOKINGS ENDPOINTS (Innovation Business)
+app.post('/api/bookings', (req, res) => {
+  const newBooking = {
+    id: String(mockBookings.length + 1),
+    ...req.body,
+    status: 'pending',
+    createdAt: new Date().toISOString()
+  };
+  mockBookings.push(newBooking);
+  res.status(201).json(newBooking);
+});
+
+app.get('/api/bookings', (req, res) => {
+  res.json({
+    data: mockBookings,
+    total: mockBookings.length,
+    totalPages: 1
+  });
+});
+
+app.get('/api/bookings/:id', (req, res) => {
+  const booking = mockBookings.find(b => b.id === req.params.id);
+  if (!booking) {
+    return res.status(404).json({ error: 'Reserva no encontrada' });
+  }
+  res.json(booking);
+});
+
+// NEW: REVIEWS ENDPOINTS (Innovation Business)
+app.get('/api/reviews', (req, res) => {
+  res.json({
+    data: mockReviews,
+    total: mockReviews.length,
+    totalPages: 1
+  });
+});
+
+app.post('/api/reviews', (req, res) => {
+  const newReview = {
+    id: String(mockReviews.length + 1),
+    ...req.body,
+    verified: false,
+    createdAt: new Date().toISOString()
+  };
+  mockReviews.push(newReview);
+  res.status(201).json(newReview);
+});
+
+app.get('/api/reviews/package/:packageId', (req, res) => {
+  const reviews = mockReviews.filter(r => r.packageId === req.params.packageId);
+  res.json({
+    data: reviews,
+    total: reviews.length,
+    totalPages: 1
+  });
+});
+
+// NEW: USERS ENDPOINTS (Innovation Business)
+app.get('/api/users/profile', (req, res) => {
+  // Mock: siempre devuelve el primer usuario
+  const user = Object.values(mockUsers)[0];
+  const { password: _, ...userWithoutPassword } = user;
+  res.json(userWithoutPassword);
+});
+
+// LEGACY: Clients (mantener compatibilidad con Kempery)
+app.get('/api/clients', (req, res) => {
+  res.json({ data: mockClients, total: mockClients.length, totalPages: 1 });
 });
 
 // Start Server
 app.listen(PORT, '0.0.0.0', () => {
   console.log('');
   console.log('🌟 Innovation Business Backend Mock Server running on http://localhost:' + PORT);
-  console.log('CORS enabled for: http://localhost:3000');
+  console.log('CORS enabled for: http://localhost:3000, http://localhost:3001');
   console.log('Mode: DEVELOPMENT (Mock Data - No Database)');
   console.log('');
-  console.log('Login Credentials (DEMO):');
-  console.log('   Email: admin, paola, cobranzas');
-  console.log('   Password: Kempery2025+');
+  console.log('📚 Available Endpoints:');
+  console.log('   Authentication:');
+  console.log('     POST /api/auth/login');
+  console.log('     POST /api/auth/register');
+  console.log('   Packages:');
+  console.log('     GET /api/packages');
+  console.log('     GET /api/packages/:id');
+  console.log('   Bookings:');
+  console.log('     GET /api/bookings');
+  console.log('     POST /api/bookings');
+  console.log('   Reviews:');
+  console.log('     GET /api/reviews');
+  console.log('     POST /api/reviews');
+  console.log('');
+  console.log('✅ Demo Credentials:');
+  console.log('   Email: demo@innovation.com');
+  console.log('   Password: demo123');
   console.log('');
 });
 
