@@ -75,7 +75,7 @@ const ContactForm = () => {
     }
     
     // Prepare WhatsApp message
-    const message = `*Nueva Solicitud de Cotización - Kempery World Travel*
+    const message = `*Nueva Solicitud de Cotización - Innovation Business*
 
 *Información del Cliente:*
 • Nombre: ${formData.nombre}
@@ -94,7 +94,7 @@ Hola! Me gustaría recibir una cotización personalizada para este viaje. ¿Podr
 ¡Gracias!`
     
     // Open WhatsApp with pre-filled message
-    const whatsappUrl = `https://wa.me/593999222210?text=${encodeURIComponent(message)}`
+    const whatsappUrl = `https://wa.me/0984707978?text=${encodeURIComponent(message)}`
     window.open(whatsappUrl, '_blank')
     
     // Reset form
@@ -141,7 +141,7 @@ Hola! Me gustaría recibir una cotización personalizada para este viaje. ¿Podr
                   </div>
                   <div>
                     <h4 className="font-semibold text-navy">Teléfono</h4>
-                    <p className="text-gray-600">+593 99 922 2210</p>
+                    <p className="text-gray-600">0984707978</p>
                     <p className="text-sm text-gray-500">WhatsApp disponible 24/7</p>
                   </div>
                 </div>
@@ -152,7 +152,7 @@ Hola! Me gustaría recibir una cotización personalizada para este viaje. ¿Podr
                   </div>
                   <div>
                     <h4 className="font-semibold text-navy">Email</h4>
-                    <p className="text-gray-600">info@kemperytravel.com</p>
+                    <p className="text-gray-600">miguelalex21m@gmail.com</p>
                     <p className="text-sm text-gray-500">Respuesta en 24 horas</p>
                   </div>
                 </div>
