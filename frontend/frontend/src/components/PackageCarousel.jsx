@@ -4,13 +4,13 @@ import { ChevronLeft, ChevronRight, Star, MapPin, Calendar, Users, ArrowRight } 
 const PackageCarousel = () => {
   const [currentIndex, setCurrentIndex] = useState(0)
   
-  // Los primeros 5 paquetes más populares
+  // Los primeros 5 paquetes más populares con fotos de Unsplash
   const packages = [
     {
       id: 1,
       name: "Río de Janeiro - Búzios",
       description: "Disfruta de las playas paradisíacas de Búzios y la vibrante vida nocturna de Río de Janeiro.",
-      image: "/images/paquetes/RioBuzios.jpeg",
+      image: "https://images.unsplash.com/photo-1483729558449-fd1d215e7baf?w=1200&h=600&fit=crop",
       price: "Desde $1,299",
       duration: "7 días / 6 noches",
       group: "2-8 personas",
@@ -21,7 +21,7 @@ const PackageCarousel = () => {
       id: 2,
       name: "Panamá - Medellín",
       description: "Explora la modernidad de Panamá y la cultura paisa de Medellín en un viaje inolvidable.",
-      image: "/images/paquetes/PanamaMedellin.jpeg",
+      image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&h=600&fit=crop",
       price: "Desde $899",
       duration: "6 días / 5 noches",
       group: "2-6 personas",
@@ -32,7 +32,7 @@ const PackageCarousel = () => {
       id: 3,
       name: "Bogotá Clásico",
       description: "Descubre la capital colombiana con su rica historia, cultura y gastronomía.",
-      image: "/images/paquetes/BogotaClasico.jpeg",
+      image: "https://images.unsplash.com/photo-1501584257286-2b4ec5f87308?w=1200&h=600&fit=crop",
       price: "Desde $699",
       duration: "4 días / 3 noches",
       group: "2-10 personas",
@@ -41,9 +41,9 @@ const PackageCarousel = () => {
     },
     {
       id: 4,
-      name: "Esencias de Grecia",
+      name: "Santorini - Grecia",
       description: "Sumérgete en la cuna de la civilización occidental con sus islas y monumentos históricos.",
-      image: "/images/paquetes/EsenciasGrecia.jpeg",
+      image: "https://images.unsplash.com/photo-1613395877344-13d4a8e0d049?w=1200&h=600&fit=crop",
       price: "Desde $2,199",
       duration: "10 días / 9 noches",
       group: "2-12 personas",
@@ -52,9 +52,9 @@ const PackageCarousel = () => {
     },
     {
       id: 5,
-      name: "Panamá - Isla Mamey",
+      name: "Isla Mamey - Panamá",
       description: "Relájate en las paradisíacas playas de Isla Mamey con aguas cristalinas y arena blanca.",
-      image: "/images/paquetes/PanamaIslaMamey.jpeg",
+      image: "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=1200&h=600&fit=crop",
       price: "Desde $1,199",
       duration: "5 días / 4 noches",
       group: "2-8 personas",
@@ -115,14 +115,19 @@ const PackageCarousel = () => {
                   <div className="container mx-auto px-6 lg:px-8">
                     <div className="max-w-4xl">
                       {/* Badge de tipo */}
-                      <div className="inline-flex items-center px-4 py-2 rounded-full bg-accent/20 backdrop-blur-sm border border-accent/30 mb-6">
-                        <span className="text-accent font-semibold text-sm">{pkg.type}</span>
+                      <div className="inline-flex items-center px-4 py-2 rounded-full bg-amber-500/30 backdrop-blur-sm border border-amber-400/50 mb-6">
+                        <span className="text-amber-200 font-semibold text-sm">{pkg.type}</span>
                       </div>
 
-                      {/* Título */}
-                      <h2 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight">
-                        {pkg.name}
-                      </h2>
+                      {/* Título - Nombre y tipo separados */}
+                      <div className="mb-8">
+                        <h2 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-tight mb-4">
+                          {pkg.name.split(' - ')[0]}
+                        </h2>
+                        <p className="text-2xl md:text-3xl text-amber-200 font-semibold">
+                          {pkg.name.split(' - ')[1] || pkg.type}
+                        </p>
+                      </div>
 
                       {/* Descripción */}
                       <p className="text-xl md:text-2xl text-gray-200 mb-8 leading-relaxed">
@@ -131,15 +136,15 @@ const PackageCarousel = () => {
 
                       {/* Detalles del paquete */}
                       <div className="flex flex-wrap gap-6 mb-8">
-                        <div className="flex items-center gap-2 text-accent">
+                        <div className="flex items-center gap-2 text-amber-200">
                           <Calendar size={20} />
                           <span className="text-sm font-medium">{pkg.duration}</span>
                         </div>
-                        <div className="flex items-center gap-2 text-accent">
+                        <div className="flex items-center gap-2 text-amber-200">
                           <Users size={20} />
                           <span className="text-sm font-medium">{pkg.group}</span>
                         </div>
-                        <div className="flex items-center gap-2 text-accent">
+                        <div className="flex items-center gap-2 text-amber-300">
                           <Star size={20} className="fill-current" />
                           <span className="text-sm font-medium">{pkg.rating}</span>
                         </div>
@@ -147,7 +152,7 @@ const PackageCarousel = () => {
 
                       {/* Precio y CTA */}
                       <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6">
-                        <div className="text-3xl md:text-4xl font-bold text-accent">
+                        <div className="text-3xl md:text-4xl font-bold text-amber-300">
                           {pkg.price}
                         </div>
                         <button
