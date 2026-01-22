@@ -24,7 +24,14 @@ function App() {
       <AuthProvider>
         <div className="min-h-screen bg-gray-50">
           <Routes>
-            <Route path="/" element={<HomePageDorada />} />
+            <Route path="/" element={
+              <>
+                <Navbar />
+                <HomePageDorada />
+                <Footer />
+                <WhatsAppFloat />
+              </>
+            } />
             <Route path="/resenias" element={
               <>
                 <Navbar />

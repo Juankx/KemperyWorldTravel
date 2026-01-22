@@ -1,8 +1,6 @@
 import React, { useState } from 'react'
 import { ChevronLeft, ChevronRight, MapPin, DollarSign, Star } from 'lucide-react'
-import Navbar from '../components/Navbar'
 import TestimonialsPremium from '../components/TestimonialsPremium'
-import Footer from '../components/Footer'
 
 const HomePageDorada = () => {
   const [currentSlide, setCurrentSlide] = useState(0)
@@ -68,9 +66,6 @@ const HomePageDorada = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-amber-50 to-white">
-      {/* Navigation */}
-      <Navbar />
-      
       {/* Hero Section con Video de Fondo */}
       <section className="relative h-screen bg-gradient-to-r from-amber-900 via-amber-800 to-yellow-700 flex items-center justify-center overflow-hidden">
         {/* Video de Fondo */}
@@ -283,9 +278,6 @@ const HomePageDorada = () => {
           </button>
         </div>
       </section>
-
-      {/* Footer Component */}
-      <Footer />
     </div>
   )
 }
