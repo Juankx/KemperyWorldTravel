@@ -20,24 +20,24 @@ const users = {
   'admin': { 
     id: 1, 
     email: 'admin', 
-    password: 'Kempery2025+', 
+    password: 'innovetion', 
     first_name: 'Admin', 
     last_name: 'User', 
     role: 'admin' 
   },
-  'paola': { 
+  'reservas': { 
     id: 2, 
-    email: 'paola', 
-    password: 'Kempery2025+', 
-    first_name: 'Paola', 
+    email: 'reservas', 
+    password: 'innovetion', 
+    first_name: 'Reservas', 
     last_name: 'Usuario', 
     role: 'employee' 
   },
-  'cobranzas': {
+  'cobranza': {
     id: 3,
-    email: 'cobranzas',
-    password: 'Kempery2025+',
-    first_name: 'Cobranzas',
+    email: 'cobranza',
+    password: 'innovetion',
+    first_name: 'Cobranza',
     last_name: 'User',
     role: 'cobranza' 
   }
