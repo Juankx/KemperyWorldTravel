@@ -90,7 +90,7 @@ const Navbar = () => {
                 <Link to="/resenias" className="text-amber-50 hover:text-yellow-300 px-3 py-2 text-sm font-medium transition-colors">
                   RESEÑAS
                 </Link>
-                <Link to="/contacto" className="text-amber-50 hover:text-yellow-300 px-3 py-2 text-sm font-medium transition-colors">
+                <Link to="/contactanos" className="text-amber-50 hover:text-yellow-300 px-3 py-2 text-sm font-medium transition-colors">
                   CONTACTO
                 </Link>
               </div>
@@ -160,7 +160,7 @@ const Navbar = () => {
             <Link to="/resenias" className="text-amber-50 hover:text-yellow-300 hover:bg-amber-700 block px-3 py-2 text-base font-medium rounded" onClick={() => setIsOpen(false)}>
               RESEÑAS
             </Link>
-            <Link to="/contacto" className="text-amber-50 hover:text-yellow-300 hover:bg-amber-700 block px-3 py-2 text-base font-medium rounded" onClick={() => setIsOpen(false)}>
+            <Link to="/contactanos" className="text-amber-50 hover:text-yellow-300 hover:bg-amber-700 block px-3 py-2 text-base font-medium rounded" onClick={() => setIsOpen(false)}>
               CONTACTO
             </Link>
             <div className="pt-2 border-t border-amber-700">
