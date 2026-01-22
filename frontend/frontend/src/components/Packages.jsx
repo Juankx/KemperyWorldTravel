@@ -209,14 +209,14 @@ const Packages = () => {
   }
 
   return (
-    <section id="paquetes" className="py-20 bg-white">
+    <section id="paquetes" className="py-20 bg-gradient-to-b from-gray-900 via-amber-950 to-gray-900">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center mb-16 animate-slide-up">
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-navy mb-6">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-amber-200 mb-6">
             Paquetes Turísticos Activos
           </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          <p className="text-xl text-amber-100 max-w-3xl mx-auto">
             Descubre nuestras ofertas más populares y planifica tu próxima aventura 
             con paquetes personalizados para todos los gustos y presupuestos.
           </p>
@@ -227,7 +227,7 @@ const Packages = () => {
           {packages.map((pkg, index) => (
             <div 
               key={pkg.id} 
-              className="card overflow-hidden animate-slide-up"
+              className="card overflow-hidden animate-slide-up bg-gray-800/50 backdrop-blur border border-amber-700/30 hover:border-amber-500/50 transition-colors duration-300"
               style={{ animationDelay: `${index * 0.1}s` }}
             >
               {/* Package Image */}
@@ -240,30 +240,30 @@ const Packages = () => {
                 <div className="absolute top-4 left-4">
                   <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
                     pkg.type === 'Nacional' 
-                      ? 'bg-green-500 text-white' 
-                      : 'bg-blue-500 text-white'
+                      ? 'bg-amber-600 text-white' 
+                      : 'bg-amber-500 text-white'
                   }`}>
                     {pkg.type}
                   </span>
                 </div>
-                <div className="absolute top-4 right-4 flex items-center gap-1 bg-white/90 px-2 py-1 rounded-full">
-                  <Star size={14} className="text-yellow-500 fill-current" />
-                  <span className="text-sm font-semibold text-gray-800">{pkg.rating}</span>
+                <div className="absolute top-4 right-4 flex items-center gap-1 bg-amber-600/90 px-2 py-1 rounded-full">
+                  <Star size={14} className="text-amber-200 fill-current" />
+                  <span className="text-sm font-semibold text-amber-100">{pkg.rating}</span>
                 </div>
               </div>
 
               {/* Package Content */}
               <div className="p-6">
-                <h3 className="text-xl font-bold text-navy mb-3">{pkg.name}</h3>
-                <p className="text-gray-600 mb-4 line-clamp-3">{pkg.description}</p>
+                <h3 className="text-xl font-bold text-amber-200 mb-3">{pkg.name}</h3>
+                <p className="text-amber-100 mb-4 line-clamp-3">{pkg.description}</p>
                 
                 {/* Package Details */}
                 <div className="space-y-2 mb-4">
-                  <div className="flex items-center gap-2 text-sm text-gray-500">
+                  <div className="flex items-center gap-2 text-sm text-amber-300">
                     <Calendar size={16} />
                     <span>{pkg.duration}</span>
                   </div>
-                  <div className="flex items-center gap-2 text-sm text-gray-500">
+                  <div className="flex items-center gap-2 text-sm text-amber-300">
                     <Users size={16} />
                     <span>{pkg.group}</span>
                   </div>
@@ -271,7 +271,7 @@ const Packages = () => {
 
                 {/* Price and CTA */}
                 <div className="flex items-center justify-between">
-                  <div className="text-2xl font-bold text-navy">{pkg.price}</div>
+                  <div className="text-2xl font-bold text-amber-300">{pkg.price}</div>
                   <button
                     onClick={() => openWhatsApp(pkg.name)}
                     className="btn-secondary flex items-center gap-2"
